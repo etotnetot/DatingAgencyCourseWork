@@ -1,0 +1,20 @@
+﻿<div class="card">
+
+    <img class="card-img-top" src="@ConvertImageToUrl(CurrentUser.ProfilePicture)" alt="Card image cap">
+    <h5 class="card-title">@CurrentUser.Username</h5>
+    <div class="card-body">
+        <p class="card-text">@CurrentUser.Age</p>
+        <p class="card-text">@CurrentUser.City</p>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public UserViewModel CurrentUser { get; set; }
+
+    private string ConvertImageToUrl(byte[] imageToConvert)
+    {
+        return "data:image;base64," + Convert.ToBase64String(imageToConvert);
+    }
+}

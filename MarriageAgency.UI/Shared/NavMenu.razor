@@ -1,0 +1,68 @@
+﻿<nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <a class="navbar-brand" href="">Deposit Calculator</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="navbar-nav mr-auto">
+            <AuthorizeView>
+                <Authorized>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="counter">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Profile
+                        </NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="profiles">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Find
+                        </NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="profiles">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Invitations
+                        </NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="logout">
+                            <span class="oi oi-plus" aria-hidden="true"></span> Logout
+                        </NavLink>
+                    </li>
+
+                </Authorized>
+                <NotAuthorized>
+
+                    <RedirectToLoginComponent></RedirectToLoginComponent>
+
+                </NotAuthorized>
+            </AuthorizeView>
+
+            <li class="nav-item">
+                <NavLink class="nav-link" href="fetchdata">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> History
+                </NavLink>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .navbar-nav {
+        align-items: baseline;
+    }
+</style>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

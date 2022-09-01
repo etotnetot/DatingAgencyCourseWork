@@ -1,0 +1,27 @@
+﻿@page "/counter"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<p>
+    @if (!string.IsNullOrWhiteSpace(userName)) 
+    { 
+        <span>@userName</span>
+    }
+</p>
+
+@code {
+    private int currentCount = 0;
+
+    private string userName = "Anonymous";
+
+    [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+        userName = currentState?.User?.Identity?.Name ?? "Noname";
+    }
+}

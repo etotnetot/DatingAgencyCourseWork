@@ -1,0 +1,49 @@
+﻿@page "/profiles"
+
+<div class="flex-wrap">
+
+    <h1>Available partners</h1>
+
+    <div class="input-group">
+        <div class="form-outline">
+            <input id="search-focus form1" type="search" class="form-control" />
+            <label class="form-label" for="form1">Search</label>
+        </div>
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+
+    <div class="wrap">
+        <button type="button" class="btn btn-primary btn-lg" @onclick="GetBestCandidates">
+            Find besties!
+        </button>
+        <button type="button" class="btn btn-secondary btn-lg" @onclick="ShowAllUsers">
+            Show all
+        </button>
+    </div>
+
+</div>
+
+<div class="card-deck">
+
+    @foreach (var currentUser in UsersToDisplay)
+     {
+        <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+     }
+
+</div>
+
+@code {
+    public List<UserViewModel> UsersToDisplay { get; set; }
+
+    private void ShowAllUsers()
+    {
+        //Users = calling api method in main controller
+    }
+
+    private void GetBestCandidates()
+    {
+        //Users = calling api method in main controller
+    }
+}

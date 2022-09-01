@@ -1,0 +1,29 @@
+﻿@page "/login"
+
+@inherits LoginModel
+@using MarriageAgency.UI.Components
+
+<div class="row">
+    <div class="col-md-6 offset-md-6" style="margin: auto;">
+
+        <h1>
+            Log In
+        </h1>
+
+        <EditForm Model="@CurrentLoginData" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+
+            <label for="Username">Username</label>
+            <InputText id="Username" @bind-Value="CurrentLoginData.Username" class="form-control" />
+            <label for="Password">Password</label>
+            <InputText id="Password" @bind-Value="CurrentLoginData.Password" class="form-control" />
+
+            <p class="my-4">
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </p>
+
+        </EditForm>
+
+    </div>
+</div>
