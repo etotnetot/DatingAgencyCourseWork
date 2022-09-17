@@ -9,6 +9,7 @@ using System.Security.Claims;
 using MarriageAgency.UI.Services;
 using MarriageAgency.Shared.Models;
 using System.Collections.Generic;
+using MarriageAgency.UI.Interfaces;
 
 namespace MarriageAgency.UI
 {
@@ -16,7 +17,7 @@ namespace MarriageAgency.UI
     {
         public static async Task Main(string[] args)
         {
-            await Task.Delay(5000);
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
@@ -33,15 +34,16 @@ namespace MarriageAgency.UI
             var serviceProvider = services.BuildServiceProvider();
             services.AddScoped(provider =>
             {
-                var configurationService = provider.GetService<IConfiguration>();
-                var connectionString = configurationService.GetConnectionString("BaseAdress");
                 return new HttpClient
                 {
-                    BaseAddress = new Uri(connectionString)
+                    BaseAddress = new Uri("https://localhost:5001/api/")
                 };
-            })
-            .AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>()
-            .AddScoped<ILocalStorageService, LocalStorageService>();
+            });
+
+            services
+                .AddScoped<IAgencyApiService, AgencyApiService>()
+                .AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>()
+                .AddScoped<ILocalStorageService, LocalStorageService>();
         }
     }
 

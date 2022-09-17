@@ -4,15 +4,7 @@
 
     <h1>Available partners</h1>
 
-    <div class="input-group">
-        <div class="form-outline">
-            <input id="search-focus form1" type="search" class="form-control" />
-            <label class="form-label" for="form1">Search</label>
-        </div>
-        <button type="button" class="btn btn-primary">
-            <i class="fas fa-search"></i>
-        </button>
-    </div>
+    <SearchBarComponent OnSearch="HandleSearch"></SearchBarComponent>
 
     <div class="wrap">
         <button type="button" class="btn btn-primary btn-lg" @onclick="GetBestCandidates">
@@ -25,17 +17,46 @@
 
 </div>
 
-<div class="card-deck">
-
-    @foreach (var currentUser in UsersToDisplay)
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @if (UsersToDisplay == null)
      {
-        <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+        <p><em>Loading...</em></p>
      }
-
+     else
+     {
+         @foreach (var currentUser in UsersToDisplay)
+          {
+            <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+          }
+     }
 </div>
 
+<style>
+
+    .flex-wrap {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        align-items: center;
+        height: 210px;
+    }
+
+</style>
+
 @code {
-    public List<UserViewModel> UsersToDisplay { get; set; }
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    private IEnumerable<UserViewModel> UsersToDisplay { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var usersList = await AgencyApiService.GetUsers("GetUsers");
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);
+    }
 
     private void ShowAllUsers()
     {
@@ -45,5 +66,17 @@
     private void GetBestCandidates()
     {
         //Users = calling api method in main controller
+    }
+
+    private void HandleSearch(string searchString)
+    {
+        var searchQuery = (from user in UsersToDisplay
+                           where user.Username.StartsWith(searchString) ||
+                              user.City.StartsWith(searchString) || user.Age == Convert.ToInt32(searchString)
+                           orderby user.Username
+                           select user);
+
+        UsersToDisplay = searchQuery.ToList();
+        StateHasChanged();
     }
 }

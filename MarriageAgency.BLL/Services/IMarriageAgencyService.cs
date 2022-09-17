@@ -1,4 +1,4 @@
-﻿using MarriageAgency.BLL.Models;
+﻿using MarriageAgency.Shared.Models;
 using System.Collections.Generic;
 
 namespace MarriageAgency.BLL.Services
@@ -7,8 +7,12 @@ namespace MarriageAgency.BLL.Services
     {
         public IEnumerable<User> GetUsers();
 
+        public IEnumerable<UserViewModel> GetUsersViewModels();
+
         public User GetUserByName(string nameOfUser);
 
-        public bool SendMessage(string messageContent, string messageReceiver);
+        public bool SendInvitation(string messageContent, string messageReceiver);
+
+        public IEnumerable<User> GetBestCandidates(string userLogin);
     }
 }

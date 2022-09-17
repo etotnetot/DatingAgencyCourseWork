@@ -1,0 +1,18 @@
+﻿<div class="search-bar">
+    <input @bind-value="searchString" type="text" name="searchBar" placeholder="Find your love.." style="font-size: larger;" />
+    <button type="button" class="btn btn-primary btn-lg" @onclick="HandleSearch" style="background-color: #e08255">
+        Search
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string searchString { get; set; }
+
+    protected void HandleSearch()
+    {
+        OnSearch.InvokeAsync(searchString);
+    }
+}

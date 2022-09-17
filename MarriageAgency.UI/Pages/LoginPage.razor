@@ -4,13 +4,11 @@
 @using MarriageAgency.UI.Components
 
 <div class="row">
-    <div class="col-md-6 offset-md-6" style="margin: auto;">
+    <div class="form col-md-6 offset-md-6">
 
-        <h1>
-            Log In
-        </h1>
+        <h1>Log In</h1>
 
-        <EditForm Model="@CurrentLoginData" OnValidSubmit="LoginAsync">
+        <EditForm Model="@CurrentLoginData" OnValidSubmit="LoginAsync" style="width:350px;">
             <DataAnnotationsValidator></DataAnnotationsValidator>
             <ValidationSummary></ValidationSummary>
 
@@ -19,7 +17,7 @@
             <label for="Password">Password</label>
             <InputText id="Password" @bind-Value="CurrentLoginData.Password" class="form-control" />
 
-            <p class="my-4">
+            <p class="button my-4">
                 <button type="submit" class="btn btn-primary">Log In</button>
             </p>
 
@@ -27,3 +25,17 @@
 
     </div>
 </div>
+
+<style>
+    .form {
+        align-items: center;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+    }
+
+    .button {
+        display: grid;
+    }
+</style>

@@ -1,5 +1,5 @@
-﻿<nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="">Deposit Calculator</a>
+﻿<nav class="navbar navbar-expand-sm navbar-light bg-light" style="justify-content: space-between;">
+    <a class="navbar-brand" href="" style="font-size:20px;">Marriage aGENcy</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -10,27 +10,19 @@
                 <Authorized>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="counter">
-                            <span class="oi oi-plus" aria-hidden="true"></span> Profile
-                        </NavLink>
+                        <NavLink class="nav-link" href="counter"> Profile</NavLink>
                     </li>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="profiles">
-                            <span class="oi oi-plus" aria-hidden="true"></span> Find
-                        </NavLink>
+                        <NavLink class="nav-link" href="profiles"> Find</NavLink>
                     </li>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="profiles">
-                            <span class="oi oi-plus" aria-hidden="true"></span> Invitations
-                        </NavLink>
+                        <NavLink class="nav-link" href="#">Invitations</NavLink>
                     </li>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="logout">
-                            <span class="oi oi-plus" aria-hidden="true"></span> Logout
-                        </NavLink>
+                        <NavLink class="nav-link" href="logout">Logout</NavLink>
                     </li>
 
                 </Authorized>
@@ -40,19 +32,25 @@
 
                 </NotAuthorized>
             </AuthorizeView>
-
-            <li class="nav-item">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> History
-                </NavLink>
-            </li>
         </ul>
     </div>
 </nav>
 
 <style>
+    .navbar {
+        background-color: #6d9772 !important;
+    }
+
     .navbar-nav {
         align-items: baseline;
+    }
+
+    .navbar-nav li {
+        font-size: 20px!important;
+    }
+
+    .navbar-brand {
+        margin-left: 100px;
     }
 </style>
 

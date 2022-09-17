@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MarriageAgency.DAL\MarriageAgency.DAL.csproj" />
+    <ProjectReference Include="..\MarriageAgency.Shared\MarriageAgency.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

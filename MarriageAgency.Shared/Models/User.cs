@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MarriageAgency.BLL.Models
+namespace MarriageAgency.Shared.Models
 {
+    [Serializable]
     public class User
     {
         public int ClientID { get; set; }
 
-        public string FullName { get; set; }
+        public string ClientFullName { get; set; }
 
         public string ClientGender { get; set; }
 
@@ -54,6 +55,14 @@ namespace MarriageAgency.BLL.Models
         public User(string mailName)
         {
             Email = mailName;
+        }
+
+        public User(string name, int age, string city)
+        {
+            ClientFullName = name;
+            Age = age;
+            ClientCity = city;
+            ProfilePhoto = new byte[] { };
         }
 
         public User() { }

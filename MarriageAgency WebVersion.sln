@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarriageAgency.UI", "Marria
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarriageAgency.Shared", "MarriageAgency.Shared\MarriageAgency.Shared.csproj", "{F377C578-0A29-474D-88C0-82D2C909A122}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarriageAgency.DAL", "MarriageAgency.DAL\MarriageAgency.DAL.csproj", "{230B9C87-6020-45C8-AB24-BECAE844A2D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F377C578-0A29-474D-88C0-82D2C909A122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F377C578-0A29-474D-88C0-82D2C909A122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F377C578-0A29-474D-88C0-82D2C909A122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{230B9C87-6020-45C8-AB24-BECAE844A2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{230B9C87-6020-45C8-AB24-BECAE844A2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{230B9C87-6020-45C8-AB24-BECAE844A2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{230B9C87-6020-45C8-AB24-BECAE844A2D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

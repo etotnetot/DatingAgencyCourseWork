@@ -1,3 +1,4 @@
+using MarriageAgency.BLL.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,8 @@ namespace MarriageAgency_WebVersion
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Dating Agency", Version = "v1.0" });
             });
+
+            services.AddScoped<IMarriageAgencyService, MarriageAgencyService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

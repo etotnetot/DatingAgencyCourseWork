@@ -1,17 +1,28 @@
-﻿<div class="card">
-
-    <img class="card-img-top" src="@ConvertImageToUrl(CurrentUser.ProfilePicture)" alt="Card image cap">
-    <h5 class="card-title">@CurrentUser.Username</h5>
-    <div class="card-body">
-        <p class="card-text">@CurrentUser.Age</p>
-        <p class="card-text">@CurrentUser.City</p>
+﻿<div class="col-3" style="margin-bottom: 10px;">
+    <div class="card h-100" style="align-items: center;">
+        <img class="card-img-top" src="@ConvertImageToUrl(CurrentUser.ProfilePicture)" alt="Card image cap" 
+             style="width: 60%;">
+        <div class="card-body" style="align-items: center; display: flex; flex-direction: column;">
+            <h5 class="card-title">@CurrentUser.Username</h5>
+            <p class="card-text">@CurrentUser.City</p>
+            <button type="button" class="btn btn-secondary btn-lg" @onclick="GoToProfile">
+                Перейти в профиль
+            </button>
+        </div>
     </div>
-
 </div>
 
 @code {
     [Parameter]
     public UserViewModel CurrentUser { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    private void GoToProfile()
+    {
+        NavigationManager.NavigateTo("");
+    }
 
     private string ConvertImageToUrl(byte[] imageToConvert)
     {
