@@ -9,5 +9,9 @@ namespace MarriageAgency.UI.Interfaces
         public Task<IEnumerable<User>> GetUsers(string queryAction);
 
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers);
+
+        public Task<User> GetUserByName(string userName);
+
+        public UserViewModel MapUser(User userToMap);
     }
 }

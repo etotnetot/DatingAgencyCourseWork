@@ -12,6 +12,14 @@
     </div>
 </div>
 
+<style>
+
+    .card-img-top {
+        margin-top: 15px !important;
+    }
+
+</style>
+
 @code {
     [Parameter]
     public UserViewModel CurrentUser { get; set; }
@@ -21,7 +29,7 @@
 
     private void GoToProfile()
     {
-        NavigationManager.NavigateTo("");
+        NavigationManager.NavigateTo("/user/" + CurrentUser.Username);
     }
 
     private string ConvertImageToUrl(byte[] imageToConvert)

@@ -1,0 +1,218 @@
+﻿@page "/user/{userName}"
+
+@if (UserToDisplay == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right picture">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" alt="Profile picture">
+                    <span class="font-weight-bold">@UserToDisplay.ClientFullName</span>
+                    <span class="text-black-50">@UserToDisplay.Email</span>
+                    <span> </span>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Change picture</button></div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Send invitation</button></div>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+
+                <div class="p-3 py-5 information">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Информация профиля</h4>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@String.Join(" ", UserToDisplay.ClientFullName)[0]"></div>
+                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@String.Join(" ", UserToDisplay.ClientFullName)[1]" placeholder="surname"></div>
+                    </div>
+
+                    <div class="row mt-3 inputs">
+                        <div class="col-md-12">
+                            <label class="labels">Gender</label>
+                            <select>
+                                <option value="Yes">Мужской</option>
+                                <option value="No">Женский</option>
+                                <option value="No">Небинарный</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Education</label>
+                            <select>
+                                <option value="Yes">Среднее</option>
+                                <option value="No">Среднее специальное</option>
+                                <option value="No">Высшее</option>
+                                <option value="No">Без образования</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="labels">Bodytype:</label>
+                            <select name="body">
+                                <option value="Yes">Обычное</option>
+                                <option value="No">Атлетическое</option>
+                                <option value="No">Спортивное</option>
+                                <option value="No">Упитанное</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Kids</label>
+                            <select>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter your city" value="@UserToDisplay.ClientCity"></div>
+                        <div class="col-md-12"><label class="labels">Hobbies</label><input type="text" class="form-control" placeholder="Hobbies" value="@UserToDisplay.ClientHobbies"></div>
+                        <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>
+                        <div class="col-md-12"><label class="labels">Fetishes</label><input type="text" class="form-control" placeholder="Fetishes" value="@UserToDisplay.FetishID"></div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label class="labels">Date of birth</label><input type="datetime-local" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate"></div>
+                        <div class="col-md-6"><label class="labels">Zodiac Sign</label><input type="text" class="form-control" value="@CountZodiacSign(UserToDisplay.BirthDate)" placeholder="your zodiac sign"></div>
+                    </div>
+
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Save Profile</button></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .border-right {
+        border-right: 0px !important;
+    }
+
+    .profile-img-main {
+        margin: 25px;
+        width: 85%;
+    }
+
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    .information {
+        width: 500px;
+        margin-left: 100px;
+    }
+
+    .container {
+        @*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*@
+    }
+
+    .picture {
+        margin-top: 25px;
+        margin-left: 50px;
+    }
+
+    .custom-btn {
+        background: #d8bcfc !important;
+        border: none !important;
+        color: black !important;
+        font-weight: 400 !important;
+        font-size: 20px !important;
+    }
+
+    .inputs {
+        height: 600px;
+    }
+</style>
+
+@code {
+    public User UserToDisplay { get; set; }
+
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserToDisplay = await AgencyApiService.GetUserByName(UserName);
+    }
+
+    private string CountZodiacSign(DateTime dateToCount)
+    {
+        int day = dateToCount.Day;
+        int month = dateToCount.Month;
+        switch (month)
+        {
+            case 1:
+                if (day <= 19)
+                    return "Козерог";
+                else
+                    return "Водолей";
+            case 2:
+                if (day <= 18)
+                    return "Водолей";
+                else
+                    return "Рыбы";
+            case 3:
+                if (day <= 20)
+                    return "Водолей";
+                else
+                    return "Овен";
+            case 4:
+                if (day <= 19)
+                    return "Овен";
+                else
+                    return "Телец";
+            case 5:
+                if (day <= 20)
+                    return "Телец";
+                else
+                    return "Близнецы";
+            case 6:
+                if (day <= 20)
+                    return "Близнецы";
+                else
+                    return "Cancer";
+            case 7:
+                if (day <= 22)
+                    return "Рак";
+                else
+                    return "Лев";
+            case 8:
+                if (day <= 22)
+                    return "Лев";
+                else
+                    return "Дева";
+            case 9:
+                if (day <= 22)
+                    return "Дева";
+                else
+                    return "Весы";
+            case 10:
+                if (day <= 22)
+                    return "Весы";
+                else
+                    return "Скорпион";
+            case 11:
+                if (day <= 21)
+                    return "Скорпион";
+                else
+                    return "Стрелец";
+            case 12:
+                if (day <= 21)
+                    return "Стрелец";
+                else
+                    return "Козерог";
+        }
+
+        return "";
+    }
+
+    private string ConvertImageToUrl(byte[] imageToConvert)
+    {
+        return "data:image;base64," + Convert.ToBase64String(imageToConvert);
+    }
+}

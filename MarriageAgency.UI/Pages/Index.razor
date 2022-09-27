@@ -1,12 +1,25 @@
 ﻿@page "/"
 
-<h1>Authorization!</h1>
+<div class="welcome">
 
-<AuthorizeView>
-    <Authorized>
-        Welcome @context.User.Identity.Name !
-    </Authorized>
-    <NotAuthorized>
-        You are not authorized. Go to <a href="/login">Login</a>
-    </NotAuthorized>
-</AuthorizeView>
+    <h1>Authorization!</h1>
+    <AuthorizeView>
+        <Authorized>
+            Welcome @context.User.Identity.Name !
+        </Authorized>
+        <NotAuthorized>
+            You are not authorized. Go to <a href="/login">Login</a>
+        </NotAuthorized>
+    </AuthorizeView>
+
+</div>
+
+<style>
+
+    .welcome {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+</style>

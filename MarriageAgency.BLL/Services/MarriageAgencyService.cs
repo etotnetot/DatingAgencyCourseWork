@@ -29,13 +29,6 @@ namespace MarriageAgency.BLL.Services
         public IEnumerable<User> GetUsers()
         {
             return _dataService.GetUsers();
-            /*return new List<User>()
-            {
-                new User("dima", 4, "argo"),
-                new User("dim", 4, "argo"),
-                new User("di", 4, "argo"),
-                new User("d", 4, "argo")
-            };*/
         }
 
         public User GetUserByName(string nameOfUser)

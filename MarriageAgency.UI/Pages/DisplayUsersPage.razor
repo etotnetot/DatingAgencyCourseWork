@@ -47,9 +47,6 @@
     [Inject]
     public IAgencyApiService AgencyApiService { get; set; }
 
-    [Inject]
-    public HttpClient HttpClient { get; set; }
-
     private IEnumerable<UserViewModel> UsersToDisplay { get; set; }
 
     protected override async Task OnInitializedAsync()

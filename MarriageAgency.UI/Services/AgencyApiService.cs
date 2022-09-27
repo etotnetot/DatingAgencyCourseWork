@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace MarriageAgency.UI.Services
 {
@@ -52,6 +53,28 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<IEnumerable<User>>(apiResponse.Result);
         }
 
+        public async Task<User> GetUserByName(string userName)
+        {
+            var inputDataQuery = new Dictionary<string, string>()
+            {
+                ["nameOfUser"] = userName
+            };
+
+            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\GetUserByName", inputDataQuery);
+
+            var serverResponse = await _httpClient.GetAsync(uriString);
+
+            if (!serverResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+            };
+
+            var apiResponse = serverResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<User>(apiResponse.Result);
+        }
+
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers)
         {
             List<UserViewModel> mappedUsers = new();
@@ -63,6 +86,11 @@ namespace MarriageAgency.UI.Services
             }
 
             return mappedUsers;
+        }
+
+        public UserViewModel MapUser(User userToMap)
+        {
+            return mapperInstance.Map<UserViewModel>(userToMap);
         }
     }
 }
