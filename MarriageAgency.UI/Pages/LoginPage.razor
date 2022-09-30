@@ -1,5 +1,6 @@
 ﻿@page "/login"
 
+@inject NavigationManager navigationManager 
 @inherits LoginModel
 @using MarriageAgency.UI.Components
 
@@ -18,7 +19,11 @@
             <InputText id="Password" @bind-Value="CurrentLoginData.Password" class="form-control" />
 
             <p class="button my-4">
-                <button type="submit" class="btn btn-primary">Log In</button>
+                <button type="submit" class="my-btn btn btn-primary">Log In</button>
+            </p>
+            <p class="button my-4">
+                <p id="text">Don't have an account?</p>
+                <button @onclick="@(()=> navigationManager.NavigateTo("/registration"))" class="my-btn btn btn-primary">Register</button>
             </p>
 
         </EditForm>
@@ -27,6 +32,12 @@
 </div>
 
 <style>
+
+    #text {
+        justify-content: center;
+        display: flex;
+    }
+
     .form {
         align-items: center;
         margin: auto;
@@ -38,4 +49,9 @@
     .button {
         display: grid;
     }
+
+    .my-btn {
+        background-color: #383434 !important;
+    }
+
 </style>

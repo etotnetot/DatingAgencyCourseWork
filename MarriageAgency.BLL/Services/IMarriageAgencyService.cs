@@ -14,5 +14,7 @@ namespace MarriageAgency.BLL.Services
         public bool SendInvitation(string messageContent, string messageReceiver);
 
         public IEnumerable<User> GetBestCandidates(string userLogin);
+
+        public bool AddNewUser(User userToAdd);
     }
 }

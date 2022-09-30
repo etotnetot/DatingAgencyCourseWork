@@ -75,6 +75,25 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<User>(apiResponse.Result);
         }
 
+        public async Task AddUser(User userToRegister)
+        {
+            var inputDataQuery = new Dictionary<string, string>()
+            {
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userToRegister.ClientFullName
+            };
+        }
+
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers)
         {
             List<UserViewModel> mappedUsers = new();

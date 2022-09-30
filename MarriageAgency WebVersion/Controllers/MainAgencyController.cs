@@ -56,5 +56,12 @@ namespace MarriageAgency_WebVersion.Controllers
         {
             return Ok();
         }
+
+        [HttpPost]
+        [Route("AddUser")]
+        public IActionResult AddUser([FromQuery] User newUser)
+        {
+            return Ok(_marriageAgencyService.AddNewUser(newUser));
+        }
     }
 }
