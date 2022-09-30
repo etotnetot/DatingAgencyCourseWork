@@ -75,23 +75,47 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<User>(apiResponse.Result);
         }
 
-        public async Task AddUser(User userToRegister)
+        public async Task<bool> AddUser(User userToRegister, Requirement requirementsOfUser)
         {
             var inputDataQuery = new Dictionary<string, string>()
             {
                 ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName,
-                ["ClientFullName"] = userToRegister.ClientFullName
+                ["ClientID"] = "0",
+                ["ClientPassword"] = userToRegister.ClientPassword,
+                ["ClientGender"] = userToRegister.ClientGender,
+                ["BirthDate"] = userToRegister.BirthDate.ToString("yyyy-MM-dd"),
+                ["Email"] = userToRegister.Email,
+                ["FetishID"] = userToRegister.FetishID.ToString(),
+                ["ClientInformation"] = userToRegister.ClientInformation,
+                ["ClientHobbies"] = userToRegister.ClientHobbies,
+                ["ClientKids"] = userToRegister.ClientKids,
+                ["EducationID"] = userToRegister.EducationID,
+                ["BodyType"] = userToRegister.BodyType,
+                ["ClientCity"] = userToRegister.ClientCity
             };
+
+            var inputDataQueryRequirements = new Dictionary<string, string>()
+            {
+                ["RequirementID"] = "0",
+                ["AgeFrom"] = requirementsOfUser.AgeFrom.ToString(),
+                ["AgeFrom"] = requirementsOfUser.AgeFrom.ToString(),
+                ["Education"] = requirementsOfUser.Education,
+                ["BodyType"] = requirementsOfUser.BodyType,
+                ["PartnerGender"] = requirementsOfUser.PartnerGender,
+                ["Kids"] = requirementsOfUser.Kids
+            };
+
+            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\AddUser", inputDataQuery);
+            var secondUriString = QueryHelpers.AddQueryString(@$"MainAgency\AddRequirement", inputDataQueryRequirements);
+
+            var serverResponse = await _httpClient.GetAsync(uriString);
+            var secondServerResponse = await _httpClient.GetAsync(secondUriString);
+
+            if (!serverResponse.IsSuccessStatusCode || !secondServerResponse.IsSuccessStatusCode)
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+
+            return true;
         }
 
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers)

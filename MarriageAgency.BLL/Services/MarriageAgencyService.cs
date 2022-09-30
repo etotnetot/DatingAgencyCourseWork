@@ -90,9 +90,14 @@ namespace MarriageAgency.BLL.Services
             return (currentDate - birthDate) / 10000;
         }
 
-        public bool AddNewUser(User userToAdd)
+        public bool AddUser(User userToAdd)
         {
             return _dataService.AddUser(userToAdd);
+        }
+
+        public bool AddRequirement(Requirement requirementToAdd)
+        {
+            return _dataService.AddRequirement(requirementToAdd);
         }
     }
 }

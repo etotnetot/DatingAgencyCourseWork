@@ -67,9 +67,7 @@ else
                         </div>
                         <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter your city" value="@UserToDisplay.ClientCity"></div>
                         <div class="col-md-12"><label class="labels">Hobbies</label><input type="text" class="form-control" placeholder="Hobbies" value="@UserToDisplay.ClientHobbies"></div>
-                        <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>
-                        <div class="col-md-12"><label class="labels">Fetishes</label><input type="text" class="form-control" placeholder="Fetishes" value="@UserToDisplay.FetishID"></div>
-                    </div>
+                        <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>                    </div>
 
                     <div class="row mt-3">
                         <div class="col-md-6"><label class="labels">Date of birth</label><input type="datetime-local" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate"></div>
@@ -85,6 +83,11 @@ else
 }
 
 <style>
+
+    .row {
+        background-color: #dee8b4 !important;
+    }
+
     .border-right {
         border-right: 0px !important;
     }
@@ -104,10 +107,6 @@ else
         margin-left: 100px;
     }
 
-    .container {
-        @*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*@
-    }
-
     .picture {
         margin-top: 25px;
         margin-left: 50px;
@@ -124,16 +123,17 @@ else
     .inputs {
         height: 600px;
     }
+
 </style>
 
 @code {
-    public User UserToDisplay { get; set; }
-
     [Inject]
     public IAgencyApiService AgencyApiService { get; set; }
 
     [Parameter]
     public string UserName { get; set; }
+
+    public User UserToDisplay { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -144,6 +144,7 @@ else
     {
         int day = dateToCount.Day;
         int month = dateToCount.Month;
+
         switch (month)
         {
             case 1:

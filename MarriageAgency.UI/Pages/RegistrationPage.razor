@@ -3,17 +3,20 @@
     <div class="form-v10-content" style="margin-left: 60px;">
         <form class="form-detail" action="#" method="post" id="myform">
             <div class="form-left">
+
                 <h2>Personal information</h2>
+
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <input type="text" name="first_name" id="first_name" class="input-text" placeholder="Full Name/Nickname" required>
+                        <input type="text" name="first_name" @bind="NewUser.ClientFullName" id="first_name" class="input-text" placeholder="Full Name/Nickname" required>
                     </div>
                     <div class="form-row form-row-2">
-                        <input type="text" name="last_name" id="last_name" class="input-text" placeholder="Password" required>
+                        <input type="text" name="last_name" @bind="NewUser.ClientPassword" id="last_name" class="input-text" placeholder="Password" required>
                     </div>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewUser.ClientGender = e.Value.ToString())">
                         <option value="position">Gender</option>
                         <option value="director">Male</option>
                         <option value="manager">Female</option>
@@ -23,8 +26,9 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewUser.BodyType = e.Value.ToString())">
                         <option value="position">Body type</option>
                         <option value="director">Спортивное</option>
                         <option value="manager">Стандартное</option>
@@ -35,8 +39,9 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewUser.ClientKids = e.Value.ToString())">
                         <option value="position">Kids</option>
                         <option value="director">Yes</option>
                         <option value="manager">No</option>
@@ -45,15 +50,15 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <input type="text" name="company" class="company" id="company" placeholder="E-mail" required>
+                    <input type="text" name="company" class="company" @bind="NewUser.Email" id="company" placeholder="E-mail" required>
                 </div>
+
                 <div class="form-group">
-                    <div class="form-row form-row-3">
-                        <input type="text" name="business" class="business" id="business" placeholder="Fetishes" required>
-                    </div>
+
                     <div class="form-row form-row-4">
-                        <select name="employees">
+                        <select name="employees" @onchange="@((ChangeEventArgs e) => NewUser.EducationID = e.Value.ToString())">
                             <option value="employees">Education</option>
                             <option value="trainee">High</option>
                             <option value="colleague">Low</option>
@@ -63,31 +68,41 @@
                             <i class="zmdi zmdi-chevron-down"></i>
                         </span>
                     </div>
+
                 </div>
+
                 <div class="form-row">
                     <label class="labels">Date of birth</label>
                     <input type="datetime-local" id="birthdaytime" name="Birth date" value="@DateTime.Now">
                 </div>
+
                 <div class="form-row">
-                    <input type="text" name="company" class="company" id="company" placeholder="About yourself" required>
+                    <input type="text" name="company" @bind="NewUser.ClientInformation" class="company" id="company" placeholder="About yourself" required>
                 </div>
+
                 <div class="form-row">
-                    <input type="text" name="company" class="company" id="company" placeholder="City" required>
+                    <input type="text" name="company" @bind="NewUser.ClientCity" class="company" id="company" placeholder="City" required>
                 </div>
+
                 <div class="form-row">
-                    <input type="text" name="company" class="company" id="company" placeholder="Hobbies" required>
+                    <input type="text" name="company" @bind="NewUser.ClientHobbies" class="company" id="company" placeholder="Hobbies" required>
                 </div>
+
             </div>
+
             <div class="form-right">
                 <h2>Partner requirements</h2>
+
                 <div class="form-row">
-                    <input type="text" name="street" class="street" id="street" placeholder="Minimum age (enter a number)" required>
+                    <input type="text" name="street" @bind="NewRequirement.AgeFrom" class="street" id="street" placeholder="Minimum age (enter a number)" required>
                 </div>
+
                 <div class="form-row">
-                    <input type="text" name="additional" class="additional" id="additional" placeholder="Maximum age (enter a number)" required>
+                    <input type="text" name="additional" @bind="NewRequirement.AgeTo" class="additional" id="additional" placeholder="Maximum age (enter a number)" required>
                 </div>
+
                 <div class="form-row form-row-4">
-                    <select name="employees">
+                    <select name="employees" @onchange="@((ChangeEventArgs e) => NewRequirement.Education = e.Value.ToString())">
                         <option value="employees">Education</option>
                         <option value="trainee">High</option>
                         <option value="colleague">Low</option>
@@ -97,8 +112,9 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewRequirement.BodyType = e.Value.ToString())">
                         <option value="position">Bodytype</option>
                         <option value="director">Спортивное</option>
                         <option value="manager">Стандартное</option>
@@ -109,10 +125,11 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewRequirement.PartnerGender = e.Value.ToString())">
                         <option value="position">Gender</option>
-                        <option value="director">Male</option>
+                        <option value="director">Мужской</option>
                         <option value="manager">Female</option>
                         <option value="employee">N/B</option>
                     </select>
@@ -120,16 +137,18 @@
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-row">
-                    <select name="position">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => NewRequirement.Kids = e.Value.ToString())">
                         <option value="position">Kids</option>
-                        <option value="director">Yes</option>
-                        <option value="manager">No</option>
+                        <option value="director">Есть</option>
+                        <option value="manager">Нет</option>
                     </select>
                     <span class="select-btn">
                         <i class="zmdi zmdi-chevron-down"></i>
                     </span>
                 </div>
+
                 <div class="form-checkbox">
                     <label class="container">
                         <p>I do accept the <a href="#" class="text">Terms and Conditions</a> of your site.</p>
@@ -137,9 +156,11 @@
                         <span class="checkmark"></span>
                     </label>
                 </div>
+
                 <div class="form-row-last" id="button-register">
-                    <input type="submit" name="register" class="register" value="Register">
+                    <input type="submit" name="register" @onclick="RegisterUser" class="register" value="Register">
                 </div>
+
             </div>
         </form>
     </div>
@@ -430,6 +451,7 @@
     .form-v10-content .form-detail .form-right .form-row-last input {
 	    padding: 12.5px;
     }
+
     .form-v10-content .form-detail .form-left input::-webkit-input-placeholder { 
       color: #666;
       font-size: 16px;
@@ -449,10 +471,16 @@
     [Inject]
     public IAgencyApiService AgencyApiService { get; set; }
 
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
     public User NewUser { get; set; }
+
+    public Requirement NewRequirement { get; set; }
 
     private void RegisterUser()
     {
-
+        AgencyApiService.AddUser(NewUser, NewRequirement);
+        NavigationManager.NavigateTo("/user/" + NewUser.ClientFullName);
     }
 }

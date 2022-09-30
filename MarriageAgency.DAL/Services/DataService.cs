@@ -302,7 +302,7 @@ namespace MarriageAgency.DAL.Services
             }
         }
 
-        public void AddRequirement(Requirement requirementToAdd)
+        public bool AddRequirement(Requirement requirementToAdd)
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
@@ -320,6 +320,8 @@ namespace MarriageAgency.DAL.Services
                     requirementToAdd.Education
                 });
             }
+
+            return true;
         }
 
         public bool AddInvitation(Invitation invitationToSend)

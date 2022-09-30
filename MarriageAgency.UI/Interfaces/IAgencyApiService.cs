@@ -14,6 +14,6 @@ namespace MarriageAgency.UI.Interfaces
 
         public UserViewModel MapUser(User userToMap);
 
-        public Task AddUser(User userToRegister);
+        public Task<bool> AddUser(User userToRegister, Requirement requirementsOfUser);
     }
 }
