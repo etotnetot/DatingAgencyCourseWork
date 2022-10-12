@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarriageAgency.DAL.Services
 {
@@ -13,10 +14,12 @@ namespace MarriageAgency.DAL.Services
         public const string ConnectionString = @"Data Source=DESKTOP-6HGNLK3;database=DataBase_MA;
                                             Connect Timeout=30; Integrated Security=SSPI";
 
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            var reqList = GetUserRequirements();
-            var fetishList = GetUserFetishes();
+            var rList = await GetUserRequirements();
+            var reqList = rList.ToList();
+
+            /*var fetishList = GetUserFetishes();*/
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 SqlMapper.AddTypeHandler(new DapperRequirementTypeHandler());
@@ -35,7 +38,8 @@ namespace MarriageAgency.DAL.Services
                 var users = db.Query<User, Requirement, Fetish, User>(sqlExpression, (user, requirement, fetish) => {
                     user.RequirementID = reqList.SingleOrDefault(req => req.RequirementID.Equals(requirement.RequirementID));
 
-                    user.FetishID = fetishList.SingleOrDefault(fet => fet.FetishID.Equals(fetish.FetishID));
+                    user.FetishID = new Fetish();
+                    /*user.FetishID = fetishList.SingleOrDefault(fet => fet.FetishID.Equals(fetish.FetishID));*/
 
                     return user;
                 }, splitOn: "RequirementID, FetishID").ToList();
@@ -154,14 +158,14 @@ namespace MarriageAgency.DAL.Services
             return true;
         }
 
-        public List<Requirement> GetUserRequirements()
+        public async Task<IEnumerable<Requirement>> GetUserRequirements()
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 if (db.State == ConnectionState.Closed)
                     db.Open();
 
-                return db.Query<Requirement>("SELECT * FROM PartnerRequirements").ToList();
+                return await db.QueryAsync<Requirement>("SELECT * FROM PartnerRequirements");
             }
         }
 
@@ -527,9 +531,15 @@ namespace MarriageAgency.DAL.Services
                 return true;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginOfUser"></param>
+        /// <returns></returns>
         public User GetUserByLogin(string loginOfUser)
         {
-            string sql = $"SELECT * FROM Clients WHERE Email = @Email";
+            string sql = $"SELECT * FROM Clients WHERE ClientFullName = @Email";
 
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {

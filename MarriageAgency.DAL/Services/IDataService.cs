@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MarriageAgency.Shared.Models;
 
 namespace MarriageAgency.DAL.Services
 {
     public interface IDataService
     {
-        public IEnumerable<User> GetUsers();
+        public Task<IEnumerable<User>> GetUsers();
 
         public User GetUserByLogin(string loginOfUser);
 

@@ -3,6 +3,7 @@ using MarriageAgency.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarriageAgency.BLL.Services
 {
@@ -26,14 +27,16 @@ namespace MarriageAgency.BLL.Services
             };
         }
 
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return _dataService.GetUsers();
+            return await _dataService.GetUsers();
         }
 
-        public User GetUserByName(string nameOfUser)
+        public async Task<User> GetUserByName(string nameOfUser)
         {
-            return GetUsers().SingleOrDefault(user => user.ClientFullName == nameOfUser);
+            var users = await GetUsers();
+
+            return users.SingleOrDefault(user => user.ClientFullName == nameOfUser);
         }
 
         public bool SendInvitation(string messageContent, string messageReceiver)
@@ -41,17 +44,17 @@ namespace MarriageAgency.BLL.Services
             return true;
         }
 
-        public IEnumerable<User> GetBestCandidates(string userLogin)
+        public async Task<IEnumerable<User>> GetBestCandidates(string userLogin)
         {
-            /*var CurrentUser = _dataService.GetUserByLogin(userLogin);*/
-            var CurrentUser = new User();
+            var usersList = await GetUsers();
+            var CurrentUser = usersList.SingleOrDefault(user => user.ClientFullName == userLogin);
+
+            CurrentUser.BestCompability = _dataService.GetZodiacByName(CurrentUser.ZodiacSign).BestCompability;
 
             if (CurrentUser.RequirementID == null)
             {
                 throw new Exception("Заполните требования!");
             }
-
-            var usersList = GetUsers();
 
             foreach (var user in usersList)
             {

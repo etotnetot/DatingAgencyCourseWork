@@ -23,10 +23,13 @@
         <p><em>Loading...</em></p>
      }
      else
-     {
+     {    
          @foreach (var currentUser in UsersToDisplay)
-          {
-            <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+         {
+             if (currentUser.Username != CurrentUser)
+             {
+                <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+             }          
           }
      }
 </div>
@@ -47,22 +50,36 @@
     [Inject]
     public IAgencyApiService AgencyApiService { get; set; }
 
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
     private IEnumerable<UserViewModel> UsersToDisplay { get; set; }
+
+    private string CurrentUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var usersList = await AgencyApiService.GetUsers("GetUsers");
         UsersToDisplay = AgencyApiService.MapUsers(usersList);
+
+        var currentUser = await _localStorageService.GetAsync<SecurityToken>(nameof(SecurityToken));
+        CurrentUser = currentUser.UserName;
     }
 
-    private void ShowAllUsers()
+    private async void ShowAllUsers()
     {
-        //Users = calling api method in main controller
+        var usersList = await AgencyApiService.GetUsers("GetUsers");
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);
+
+        StateHasChanged();
     }
 
-    private void GetBestCandidates()
+    private async void GetBestCandidates()
     {
-        //Users = calling api method in main controller
+        var usersList = await AgencyApiService.GetBestCandidates(CurrentUser);
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);
+
+        StateHasChanged();
     }
 
     private void HandleSearch(string searchString)
@@ -74,6 +91,7 @@
                            select user);
 
         UsersToDisplay = searchQuery.ToList();
+
         StateHasChanged();
     }
 }

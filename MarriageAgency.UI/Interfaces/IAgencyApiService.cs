@@ -10,6 +10,8 @@ namespace MarriageAgency.UI.Interfaces
 
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers);
 
+        public Task<IEnumerable<User>> GetBestCandidates(string userName);
+
         public Task<User> GetUserByName(string userName);
 
         public UserViewModel MapUser(User userToMap);

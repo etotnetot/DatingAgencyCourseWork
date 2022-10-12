@@ -1,5 +1,7 @@
 ﻿@page "/registration"
 
+<EditForm Model="@_userInputModel" OnValidSubmit="RegisterAsync" style="width:350px;">
+
     <div class="form-v10-content" style="margin-left: 60px;">
         <form class="form-detail" action="#" method="post" id="myform">
             <div class="form-left">
@@ -55,6 +57,11 @@
                     <input type="text" name="company" class="company" @bind="NewUser.Email" id="company" placeholder="E-mail" required>
                 </div>
 
+                <div class="form-row">
+                    @*<input type="image" class="company" @bind="NewUser.ProfilePhoto" id="company" required>*@
+                    <input type="file" id="img" name="img" @bind="NewUser.ProfilePhoto" accept="image/*" required>
+                </div>
+
                 <div class="form-group">
 
                     <div class="form-row form-row-4">
@@ -73,7 +80,7 @@
 
                 <div class="form-row">
                     <label class="labels">Date of birth</label>
-                    <input type="datetime-local" id="birthdaytime" name="Birth date" value="@DateTime.Now">
+                    <input type="datetime-local" id="birthdaytime" name="Birth date" @bind="NewUser.BirthDate">
                 </div>
 
                 <div class="form-row">
@@ -158,26 +165,27 @@
                 </div>
 
                 <div class="form-row-last" id="button-register">
-                    <input type="submit" name="register" @onclick="RegisterUser" class="register" value="Register">
+                    <input type="submit" name="register" value="Register">
                 </div>
 
             </div>
         </form>
     </div>
+</EditForm>
 
 <style>
 
     .page-content {
-	    width: 100%;
-	    margin:  0 auto;
-	    background: #75e2e9;
-	    display: flex;
-	    display: -webkit-flex;
-	    justify-content: center;
-	    -webkit-justify-content: center;
-	    align-items: center;
-	    -webkit-align-items: center;
-	    background-image: -moz-linear-gradient( 136deg, rgb(149,153,226) 0%, rgb(139,198,236) 100%);
+        width: 100%;
+        margin: 0 auto;
+        background: #75e2e9;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+        align-items: center;
+        -webkit-align-items: center;
+        background-image: -moz-linear-gradient( 136deg, rgb(149,153,226) 0%, rgb(139,198,236) 100%);
         background-image: -webkit-linear-gradient( 136deg, rgb(149,153,226) 0%, rgb(139,198,236) 100%);
     }
 
@@ -201,267 +209,266 @@
     }
 
     .form-v10-content .form-detail {
-	    position: relative;
-	    width: 100%;
-	    display: flex;
-	    display: -webkit-flex;
+        position: relative;
+        width: 100%;
+        display: flex;
+        display: -webkit-flex;
     }
 
-    .form-v10-content .form-detail h2 {
-	    font-weight: 500;
-	    font-size: 25px;
-	    margin-bottom: 34px;
-	    padding: 33px 50px 0px 60px;
-    }
+        .form-v10-content .form-detail h2 {
+            font-weight: 500;
+            font-size: 25px;
+            margin-bottom: 34px;
+            padding: 33px 50px 0px 60px;
+        }
 
-    .form-v10-content .form-detail .form-left {
-	    border-top-left-radius: 10px;
-	    border-bottom-left-radius: 10px;
-	    width: 100%;
-    }
+        .form-v10-content .form-detail .form-left {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            width: 100%;
+        }
 
-    .form-v10-content .form-detail .form-left h2 {
-	    color: #f0845c;
-    }
+            .form-v10-content .form-detail .form-left h2 {
+                color: #f0845c;
+            }
 
-    .form-v10-content .form-detail .form-right {
-	    width: 100%;
-	    background: #f0845c;
-	    border-top-right-radius: 10px;
-	    border-bottom-right-radius: 10px;
-    }
+        .form-v10-content .form-detail .form-right {
+            width: 100%;
+            background: #f0845c;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
 
-    .form-v10-content .form-detail .form-right h2 {
-	    color: #fff;
-    }
+            .form-v10-content .form-detail .form-right h2 {
+                color: #fff;
+            }
 
-    .form-v10-content .form-detail .form-group {
-	    display: flex;
-	    display: -webkit-flex;
-    }
+        .form-v10-content .form-detail .form-group {
+            display: flex;
+            display: -webkit-flex;
+        }
 
-    .form-v10-content .form-detail .form-row {
-	    position: relative;
-	    margin-bottom: 24px;
-	    padding-left: 60px;
-        padding-right: 50px;
-    }
+        .form-v10-content .form-detail .form-row {
+            position: relative;
+            margin-bottom: 24px;
+            padding-left: 60px;
+            padding-right: 50px;
+        }
 
-    .form-v10-content .form-detail .form-left .form-group .form-row.form-row-1 {
-	    width: 50%;
-	    padding: 0 12px 0 60px;
-    }
+        .form-v10-content .form-detail .form-left .form-group .form-row.form-row-1 {
+            width: 50%;
+            padding: 0 12px 0 60px;
+        }
 
-    .form-v10-content .form-detail .form-left .form-group .form-row.form-row-2 {
-	    width: 50%;
-	    padding: 0 50px 0 12px;
-    }
+        .form-v10-content .form-detail .form-left .form-group .form-row.form-row-2 {
+            width: 50%;
+            padding: 0 50px 0 12px;
+        }
 
-    .form-v10-content .form-detail .form-left .form-group .form-row.form-row-3 {
-	    width: 73%;
-	    padding: 0 12px 0 60px;
-    }
+        .form-v10-content .form-detail .form-left .form-group .form-row.form-row-3 {
+            width: 73%;
+            padding: 0 12px 0 60px;
+        }
 
-    .form-v10-content .form-detail .form-left .form-group .form-row.form-row-4 {
-	    width: 50%;
-	    padding: 0 50px 0 12px;
-    }
+        .form-v10-content .form-detail .form-left .form-group .form-row.form-row-4 {
+            width: 50%;
+            padding: 0 50px 0 12px;
+        }
 
-    .form-v10-content .form-detail .form-right .form-group .form-row.form-row-1 {
-	    width: 50%;
-	    padding: 0 12px 0 60px;
-    }
+        .form-v10-content .form-detail .form-right .form-group .form-row.form-row-1 {
+            width: 50%;
+            padding: 0 12px 0 60px;
+        }
 
-    .form-v10-content .form-detail .form-right .form-group .form-row.form-row-2 {
-	    width: 100%;
-	    padding: 0 50px 0 12px;
-    }
+        .form-v10-content .form-detail .form-right .form-group .form-row.form-row-2 {
+            width: 100%;
+            padding: 0 50px 0 12px;
+        }
 
-    .form-v10-content .form-detail select,
-    .form-v10-content .form-detail input {
-	    width: 100%;
-        padding: 11.5px 15px 15px 15px;
-        border: 1px solid transparent;
-        background: transparent;
-        -moz-appearance: unset;
-        -webkit-appearance: unset;
-        outline: none;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 16px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
+        .form-v10-content .form-detail select,
+        .form-v10-content .form-detail input {
+            width: 100%;
+            padding: 11.5px 15px 15px 15px;
+            border: 1px solid transparent;
+            background: transparent;
+            -moz-appearance: unset;
+            -webkit-appearance: unset;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
 
-    .form-v10-content .form-detail select {
-	    background: 0 0;
-	    position: relative;
-	    z-index: 9;
-	    cursor: pointer;
-    }
+        .form-v10-content .form-detail select {
+            background: 0 0;
+            position: relative;
+            z-index: 9;
+            cursor: pointer;
+        }
 
-    .form-v10-content .form-detail .form-left select {
-	    color: #666;
-    }
+        .form-v10-content .form-detail .form-left select {
+            color: #666;
+        }
 
-    .form-v10-content .form-detail .form-right select {
-	    color: #f2f2f2;
-    }
+        .form-v10-content .form-detail .form-right select {
+            color: #f2f2f2;
+        }
 
-    .form-v10-content .form-detail .select-btn {
-	    z-index: 0;
-        position: absolute;
-        top: 30%;
-        right: 11.5%;
-        font-size: 18px;
-    }
+        .form-v10-content .form-detail .select-btn {
+            z-index: 0;
+            position: absolute;
+            top: 30%;
+            right: 11.5%;
+            font-size: 18px;
+        }
 
-    .form-v10-content .form-detail .form-left .select-btn {
-        color: #666;
-    }
+        .form-v10-content .form-detail .form-left .select-btn {
+            color: #666;
+        }
 
-    .form-v10-content .form-detail .form-right .select-btn {
-        color: #f2f2f2;
-    }
+        .form-v10-content .form-detail .form-right .select-btn {
+            color: #f2f2f2;
+        }
 
-    .form-v10-content .form-detail .form-group .form-row.form-row-4 .select-btn {
-	    top: 20%;
-	    right: 26%;
-    }
+        .form-v10-content .form-detail .form-group .form-row.form-row-4 .select-btn {
+            top: 20%;
+            right: 26%;
+        }
 
-    .form-v10-content .form-detail .form-right .form-group .form-row.form-row-2 .select-btn {
-	    top: 20%;
-	    right: 19%;
-    }
+        .form-v10-content .form-detail .form-right .form-group .form-row.form-row-2 .select-btn {
+            top: 20%;
+            right: 19%;
+        }
 
-    .form-v10-content .form-detail .form-left input {
-	    color: #000;
-    }
+        .form-v10-content .form-detail .form-left input {
+            color: #000;
+        }
 
-    .form-v10-content .form-detail .form-right input {
-	    color: #fff;
-    }
+        .form-v10-content .form-detail .form-right input {
+            color: #fff;
+        }
 
-    .form-v10-content .form-detail .form-left input,
-    .form-v10-content .form-detail .form-left select {
-	    border-bottom: 1px solid #ccc;
-    }
+        .form-v10-content .form-detail .form-left input,
+        .form-v10-content .form-detail .form-left select {
+            border-bottom: 1px solid #ccc;
+        }
 
-    .form-v10-content .form-detail .form-left input:focus,
-    .form-v10-content .form-detail .form-left select:focus {
-	    border-bottom: 1px solid #999;
-    }
+            .form-v10-content .form-detail .form-left input:focus,
+            .form-v10-content .form-detail .form-left select:focus {
+                border-bottom: 1px solid #999;
+            }
 
-    .form-v10-content .form-detail .form-right input,
-    .form-v10-content .form-detail .form-right select {
-	    border-bottom: 1px solid;
-	    border-bottom-color: rgba(255, 255, 255, 0.3);
-    }
+        .form-v10-content .form-detail .form-right input,
+        .form-v10-content .form-detail .form-right select {
+            border-bottom: 1px solid;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
 
-    .form-v10-content .form-detail .form-right input:focus,
-    .form-v10-content .form-detail .form-right select:focus {
-	    border-bottom: 1px solid #ccc;
-    }
+            .form-v10-content .form-detail .form-right input:focus,
+            .form-v10-content .form-detail .form-right select:focus {
+                border-bottom: 1px solid #ccc;
+            }
 
-    .form-v10-content .form-detail .form-right select option {
-	    background: #4835d4;
-    }
+            .form-v10-content .form-detail .form-right select option {
+                background: #4835d4;
+            }
 
-    .form-v10-content .form-detail .form-checkbox {
-	    margin-top: 37px;
-	    padding: 0 50px 0 60px;
-	    position: relative;
-    }
+        .form-v10-content .form-detail .form-checkbox {
+            margin-top: 37px;
+            padding: 0 50px 0 60px;
+            position: relative;
+        }
 
-    .form-v10-content .form-detail .form-checkbox input {
-	    position: absolute;
-        opacity: 0;
-    }
+            .form-v10-content .form-detail .form-checkbox input {
+                position: absolute;
+                opacity: 0;
+            }
 
-    .form-v10-content .form-detail .form-checkbox .checkmark {
-	    position: absolute;
-        top: 1px;
-        left: 60px;
-        height: 15px;
-        width: 15px;
-        border: 1px solid #e5e5e5;
-        cursor: pointer;
-    }
+            .form-v10-content .form-detail .form-checkbox .checkmark {
+                position: absolute;
+                top: 1px;
+                left: 60px;
+                height: 15px;
+                width: 15px;
+                border: 1px solid #e5e5e5;
+                cursor: pointer;
+            }
 
-    .form-v10-content .form-detail .form-checkbox .checkmark::after {
-	    content: "";
-        position: absolute;
-        left: 5px;
-   	    top: 1px;
-        width: 3px;
-        height: 8px;
-        border: 1px solid #fff;
-        border-width: 0 2px 2px 0;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
-        transform: rotate(45deg);
-        display: none;
-    }
+                .form-v10-content .form-detail .form-checkbox .checkmark::after {
+                    content: "";
+                    position: absolute;
+                    left: 5px;
+                    top: 1px;
+                    width: 3px;
+                    height: 8px;
+                    border: 1px solid #fff;
+                    border-width: 0 2px 2px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    -o-transform: rotate(45deg);
+                    -moz-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    display: none;
+                }
 
-    .form-v10-content .form-detail .form-checkbox input:checked ~ .checkmark::after {
-        display: block;
-    }
+            .form-v10-content .form-detail .form-checkbox input:checked ~ .checkmark::after {
+                display: block;
+            }
 
-    .form-v10-content .form-detail .form-checkbox p {
-        margin-left: 34px;
-        color: #e5e5e5;
-        font-size: 14px;
-        font-weight: 400;
-    }
+            .form-v10-content .form-detail .form-checkbox p {
+                margin-left: 34px;
+                color: #e5e5e5;
+                font-size: 14px;
+                font-weight: 400;
+            }
 
-    .form-v10-content .form-detail .form-checkbox .text {
-	    font-weight: 400;
-	    color: #fff;
-	    text-decoration: underline;
-    }
+            .form-v10-content .form-detail .form-checkbox .text {
+                font-weight: 400;
+                color: #fff;
+                text-decoration: underline;
+            }
 
-    .form-v10-content .form-detail .form-right .form-row-last {
-        padding-left: 60px;
-        margin: 44px 0 10px;
-    }
+        .form-v10-content .form-detail .form-right .form-row-last {
+            padding-left: 60px;
+            margin: 44px 0 10px;
+        }
 
-    .form-v10-content .form-detail .form-right .register {
-	    background: #fff;
-	    border-radius: 25px;
-	    -moz-border-radius: 25px;
-	    -webkit-border-radius: 25px;
-	    box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
-	    -moz-box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
-	    -webkit-box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
-	    width: 180px;
-	    border: none;
-	    margin: 6px 0 50px 0px;
-	    cursor: pointer;
-	    color: #333;
-	    font-weight: 700;
-	    font-size: 15px;
-    }
+        .form-v10-content .form-detail .form-right .register {
+            background: #fff;
+            border-radius: 25px;
+            -moz-border-radius: 25px;
+            -webkit-border-radius: 25px;
+            box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
+            -moz-box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
+            -webkit-box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
+            width: 180px;
+            border: none;
+            margin: 6px 0 50px 0px;
+            cursor: pointer;
+            color: #333;
+            font-weight: 700;
+            font-size: 15px;
+        }
 
-    .form-v10-content .form-detail .form-right .register:hover {
-	    background: #ccc;
-    }
+            .form-v10-content .form-detail .form-right .register:hover {
+                background: #ccc;
+            }
 
-    .form-v10-content .form-detail .form-right .form-row-last input {
-	    padding: 12.5px;
-    }
+        .form-v10-content .form-detail .form-right .form-row-last input {
+            padding: 12.5px;
+        }
 
-    .form-v10-content .form-detail .form-left input::-webkit-input-placeholder { 
-      color: #666;
-      font-size: 16px;
-    }
+        .form-v10-content .form-detail .form-left input::-webkit-input-placeholder {
+            color: #666;
+            font-size: 16px;
+        }
 
-    .form-v10-content .form-detail .form-right input::-webkit-input-placeholder { 
-      color: #f2f2f2;
-      font-size: 16px;
-    }
-
+        .form-v10-content .form-detail .form-right input::-webkit-input-placeholder {
+            color: #f2f2f2;
+            font-size: 16px;
+        }
 </style>
 
 @code {
@@ -474,13 +481,16 @@
     [Inject]
     private ILocalStorageService _localStorageService { get; set; }
 
+    private UserInputModel _userInputModel;
+
     public User NewUser { get; set; }
 
     public Requirement NewRequirement { get; set; }
 
-    private void RegisterUser()
+    private void RegisterAsync()
     {
         AgencyApiService.AddUser(NewUser, NewRequirement);
-        NavigationManager.NavigateTo("/user/" + NewUser.ClientFullName);
+        @*NavigationManager.NavigateTo("/user/" + NewUser.ClientFullName);*@
+        NavigationManager.NavigateTo("/login");
     }
 }

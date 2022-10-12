@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MarriageAgency.Shared.Models
 {
@@ -8,26 +9,34 @@ namespace MarriageAgency.Shared.Models
     {
         public int ClientID { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientFullName { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientGender { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientPassword { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string EducationID { get; set; }
 
         public string ZodiacSign { get; set; }
 
         public string BodyType { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientCity { get; set; }
 
         public string ClientKids { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientHobbies { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public string ClientInformation { get; set; }
 
         public Requirement RequirementID { get; set; }
@@ -36,6 +45,7 @@ namespace MarriageAgency.Shared.Models
 
         public Fetish FetishID { get; set; }
 
+        [Required(ErrorMessage = "First name is required")]
         public DateTime BirthDate { get; set; }
 
         public virtual List<Invitation> MyInvitations { get; set; }

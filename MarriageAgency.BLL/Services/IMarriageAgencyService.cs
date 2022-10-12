@@ -1,19 +1,20 @@
 ﻿using MarriageAgency.Shared.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarriageAgency.BLL.Services
 {
     public interface IMarriageAgencyService
     {
-        public IEnumerable<User> GetUsers();
+        public Task<IEnumerable<User>> GetUsers();
 
         public IEnumerable<UserViewModel> GetUsersViewModels();
 
-        public User GetUserByName(string nameOfUser);
+        public Task<User> GetUserByName(string nameOfUser);
 
         public bool SendInvitation(string messageContent, string messageReceiver);
 
-        public IEnumerable<User> GetBestCandidates(string userLogin);
+        public Task<IEnumerable<User>> GetBestCandidates(string userLogin);
 
         public bool AddUser(User userToAdd);
 

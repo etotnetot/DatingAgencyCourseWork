@@ -1,6 +1,7 @@
 ﻿using MarriageAgency.BLL.Services;
 using MarriageAgency.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace MarriageAgency_WebVersion.Controllers
 {
@@ -17,23 +18,25 @@ namespace MarriageAgency_WebVersion.Controllers
 
         [HttpGet]
         [Route("GetUsers")]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return Ok(_marriageAgencyService.GetUsers());
+            return Ok(await _marriageAgencyService.GetUsers());
         }
 
         [HttpGet]
         [Route("GetBestCandidates")]
-        public IActionResult GetBestCandidates([FromQuery] string clientId)
+        public async Task<IActionResult> GetBestCandidates([FromQuery] string userLogin)
         {
-            return Ok(_marriageAgencyService.GetBestCandidates(clientId));
+            return Ok(await _marriageAgencyService.GetBestCandidates(userLogin));
         }
 
         [HttpGet]
         [Route("GetUserByName")]
-        public IActionResult GetUserByName([FromQuery] string nameOfUser)
+        public async Task<IActionResult> GetUserByName([FromQuery] string nameOfUser)
         {
-            return Ok(_marriageAgencyService.GetUserByName(nameOfUser));
+            var res = await _marriageAgencyService.GetUserByName(nameOfUser);
+
+            return Ok(res);
         }
         
         [HttpPost]

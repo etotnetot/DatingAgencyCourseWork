@@ -27,6 +27,7 @@ namespace MarriageAgency.UI.Components
 
         protected async Task LoginAsync()
         {
+            /*Task.Delay(10000);*/
             var currentToken = new SecurityToken()
             {
                 AccessToken = CurrentLoginData.Password,
@@ -37,6 +38,7 @@ namespace MarriageAgency.UI.Components
             var desiredUser = await AgencyApiService.GetUserByName(CurrentLoginData.Username);
 
             if (CurrentLoginData.Password == desiredUser.ClientPassword)
+            /*if (CurrentLoginData.Password == "789")*/
             {
                 await LocalStorageService.SetAsync(nameof(SecurityToken), currentToken);
                 NavigationManager.NavigateTo(("/user/" + CurrentLoginData.Username), true);
