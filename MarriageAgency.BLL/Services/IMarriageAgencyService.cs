@@ -16,7 +16,9 @@ namespace MarriageAgency.BLL.Services
 
         public Task<IEnumerable<User>> GetBestCandidates(string userLogin);
 
-        public bool AddUser(User userToAdd);
+        public IEnumerable<User> GetCachedUsers();
+
+        public bool AddUser(UserInputModel userToAdd);
 
         public bool AddRequirement(Requirement requirementToAdd);
     }

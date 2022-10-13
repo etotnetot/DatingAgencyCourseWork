@@ -4,16 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MarriageAgency.BLL.Services
 {
     public class MarriageAgencyService : IMarriageAgencyService
     {
+        public IEnumerable<User> UsersList { get; set; }
+
         private readonly DataService _dataService;
 
-        public MarriageAgencyService()
+        private readonly IMemoryCache _memoryCache;
+
+        public MarriageAgencyService(IMemoryCache memoryCache)
         {
             _dataService = new DataService();
+            _memoryCache = memoryCache;
         }
 
         public IEnumerable<UserViewModel> GetUsersViewModels()
@@ -29,12 +35,27 @@ namespace MarriageAgency.BLL.Services
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _dataService.GetUsers();
+            var usersList = _memoryCache.Get<IEnumerable<User>>("users");
+
+            if (usersList == null)
+            {
+                return await _dataService.GetUsers();
+            }
+
+            return usersList;
+        }
+
+        public IEnumerable<User> GetCachedUsers()
+        {
+            return _memoryCache.Get<IEnumerable<User>>("users");
         }
 
         public async Task<User> GetUserByName(string nameOfUser)
         {
             var users = await GetUsers();
+
+            if (_memoryCache.Get<IEnumerable<User>>("users") == null)
+                _memoryCache.Set("users", users);
 
             return users.SingleOrDefault(user => user.ClientFullName == nameOfUser);
         }
@@ -93,9 +114,9 @@ namespace MarriageAgency.BLL.Services
             return (currentDate - birthDate) / 10000;
         }
 
-        public bool AddUser(User userToAdd)
+        public bool AddUser(UserInputModel userToAdd)
         {
-            return _dataService.AddUser(userToAdd);
+            return _dataService.AddUser(userToAdd.User) && _dataService.AddRequirement(userToAdd.RequirementOfUser);
         }
 
         public bool AddRequirement(Requirement requirementToAdd)

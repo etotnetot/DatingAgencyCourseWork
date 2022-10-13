@@ -24,6 +24,13 @@ namespace MarriageAgency_WebVersion.Controllers
         }
 
         [HttpGet]
+        [Route("GetCachedUsers")]
+        public IActionResult GetCachedUsers()
+        {
+            return Ok(_marriageAgencyService.GetCachedUsers());
+        }
+
+        [HttpGet]
         [Route("GetBestCandidates")]
         public async Task<IActionResult> GetBestCandidates([FromQuery] string userLogin)
         {
@@ -62,7 +69,7 @@ namespace MarriageAgency_WebVersion.Controllers
 
         [HttpPost]
         [Route("AddUser")]
-        public IActionResult AddUser([FromQuery] User newUser)
+        public IActionResult AddUser([FromQuery] UserInputModel newUser)
         {
             return Ok(_marriageAgencyService.AddUser(newUser));
         }

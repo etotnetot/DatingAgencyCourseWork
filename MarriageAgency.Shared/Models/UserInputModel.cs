@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components;
 
 namespace MarriageAgency.Shared.Models
 {
     public class UserInputModel
     {
         [Required]
-        User CurrentUser { get; set; }
+        [ValidateComplexType]
+        public User User { get; set; }
 
         [Required]
-        Requirement RequirementOfUser { get; set; }       
+        public Requirement RequirementOfUser { get; set; }       
     }
 }

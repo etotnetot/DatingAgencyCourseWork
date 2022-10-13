@@ -4,7 +4,13 @@
 
     <h1>Available partners</h1>
 
-    <SearchBarComponent OnSearch="HandleSearch"></SearchBarComponent>
+    @*<SearchBarComponent OnSearch="HandleSearch"></SearchBarComponent>*@
+    <div class="search-bar">
+        <input @bind="searchString" type="text" name="searchBar" placeholder="Find your love.." style="font-size: larger;" />
+        <button type="button" class="btn btn-primary btn-lg" @onclick="@(()=> HandleSearch())" style="background-color: #e08255">
+            Search
+        </button>
+    </div>
 
     <div class="wrap">
         <button type="button" class="btn btn-primary btn-lg" @onclick="GetBestCandidates">
@@ -55,12 +61,17 @@
 
     private IEnumerable<UserViewModel> UsersToDisplay { get; set; }
 
+    private IEnumerable<UserViewModel> currentUsersList { get; set; }
+
     private string CurrentUser { get; set; }
+
+    private string searchString { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var usersList = await AgencyApiService.GetUsers("GetUsers");
         UsersToDisplay = AgencyApiService.MapUsers(usersList);
+        currentUsersList = UsersToDisplay;
 
         var currentUser = await _localStorageService.GetAsync<SecurityToken>(nameof(SecurityToken));
         CurrentUser = currentUser.UserName;
@@ -82,11 +93,11 @@
         StateHasChanged();
     }
 
-    private void HandleSearch(string searchString)
+    public void HandleSearch()
     {
-        var searchQuery = (from user in UsersToDisplay
+        var searchQuery = (from user in currentUsersList
                            where user.Username.StartsWith(searchString) ||
-                              user.City.StartsWith(searchString) || user.Age == Convert.ToInt32(searchString)
+                              user.City.StartsWith(searchString) || (int.TryParse(searchString, out int result) && result == user.Age)
                            orderby user.Username
                            select user);
 

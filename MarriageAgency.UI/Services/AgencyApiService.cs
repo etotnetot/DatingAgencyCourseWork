@@ -49,7 +49,7 @@ namespace MarriageAgency.UI.Services
             };
 
             var apiResponse = serverResponse.Content.ReadAsStringAsync();
-
+            
             return JsonConvert.DeserializeObject<IEnumerable<User>>(apiResponse.Result);
         }
 
@@ -97,34 +97,34 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<User>(apiResponse.Result);
         }
 
-        public async Task<bool> AddUser(User userToRegister, Requirement requirementsOfUser)
+        public async Task<bool> AddUser(UserInputModel userInputModel)
         {
             var inputDataQuery = new Dictionary<string, string>()
             {
-                ["ClientFullName"] = userToRegister.ClientFullName,
+                ["ClientFullName"] = userInputModel.User.ClientFullName,
                 ["ClientID"] = "0",
-                ["ClientPassword"] = userToRegister.ClientPassword,
-                ["ClientGender"] = userToRegister.ClientGender,
-                ["BirthDate"] = userToRegister.BirthDate.ToString("yyyy-MM-dd"),
-                ["Email"] = userToRegister.Email,
-                ["FetishID"] = userToRegister.FetishID.ToString(),
-                ["ClientInformation"] = userToRegister.ClientInformation,
-                ["ClientHobbies"] = userToRegister.ClientHobbies,
-                ["ClientKids"] = userToRegister.ClientKids,
-                ["EducationID"] = userToRegister.EducationID,
-                ["BodyType"] = userToRegister.BodyType,
-                ["ClientCity"] = userToRegister.ClientCity
+                ["ClientPassword"] = userInputModel.User.ClientPassword,
+                ["ClientGender"] = userInputModel.User.ClientGender,
+                ["BirthDate"] = userInputModel.User.BirthDate.ToString("yyyy-MM-dd"),
+                ["Email"] = userInputModel.User.Email,
+                ["FetishID"] = userInputModel.User.FetishID.ToString(),
+                ["ClientInformation"] = userInputModel.User.ClientInformation,
+                ["ClientHobbies"] = userInputModel.User.ClientHobbies,
+                ["ClientKids"] = userInputModel.User.ClientKids,
+                ["EducationID"] = userInputModel.User.EducationID,
+                ["BodyType"] = userInputModel.User.BodyType,
+                ["ClientCity"] = userInputModel.User.ClientCity
             };
 
             var inputDataQueryRequirements = new Dictionary<string, string>()
             {
                 ["RequirementID"] = "0",
-                ["AgeFrom"] = requirementsOfUser.AgeFrom.ToString(),
-                ["AgeFrom"] = requirementsOfUser.AgeFrom.ToString(),
-                ["Education"] = requirementsOfUser.Education,
-                ["BodyType"] = requirementsOfUser.BodyType,
-                ["PartnerGender"] = requirementsOfUser.PartnerGender,
-                ["Kids"] = requirementsOfUser.Kids
+                ["AgeFrom"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
+                ["AgeFrom"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
+                ["Education"] = userInputModel.RequirementOfUser.Education,
+                ["BodyType"] = userInputModel.RequirementOfUser.BodyType,
+                ["PartnerGender"] = userInputModel.RequirementOfUser.PartnerGender,
+                ["Kids"] = userInputModel.RequirementOfUser.Kids
             };
 
             var uriString = QueryHelpers.AddQueryString(@$"MainAgency\AddUser", inputDataQuery);

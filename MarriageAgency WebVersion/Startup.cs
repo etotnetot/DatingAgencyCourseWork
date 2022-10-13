@@ -40,6 +40,7 @@ namespace MarriageAgency_WebVersion
             });
 
             services.AddScoped<IMarriageAgencyService, MarriageAgencyService>();
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

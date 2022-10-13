@@ -27,7 +27,7 @@ namespace MarriageAgency.UI.Components
 
         protected async Task LoginAsync()
         {
-            /*Task.Delay(10000);*/
+            Task.Delay(10000);
             var currentToken = new SecurityToken()
             {
                 AccessToken = CurrentLoginData.Password,
