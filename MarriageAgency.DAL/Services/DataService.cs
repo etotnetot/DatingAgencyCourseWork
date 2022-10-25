@@ -55,7 +55,10 @@ namespace MarriageAgency.DAL.Services
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 string query = @"SELECT * FROM ZodiacSigns WHERE ZodiacSignName = @ZodiacSignName";
-                db.Open();
+
+                if (db.State == ConnectionState.Closed)
+                    db.Open();
+
                 var order = db.QuerySingleOrDefault<ZodiacSign>(query, new { ZodiacSignName = name });
 
                 return order;
@@ -308,6 +311,8 @@ namespace MarriageAgency.DAL.Services
 
         public bool AddRequirement(Requirement requirementToAdd)
         {
+            requirementToAdd.RequirementID = GetLastRequirementId() + 1;
+
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 string insertQuery = @"INSERT INTO [dbo].[PartnerRequirements]([PartnerGender], [AgeFrom], 
@@ -366,6 +371,12 @@ namespace MarriageAgency.DAL.Services
 
         public bool AddUser(User userToAdd)
         {
+            userToAdd.RequirementID = new Requirement();
+            userToAdd.RequirementID.RequirementID = GetLastRequirementId();
+            userToAdd.FetishID = new Fetish();
+            userToAdd.FetishID.FetishID = 6;
+            userToAdd.ZodiacSign = CountZodiacSign(userToAdd.BirthDate);
+
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 string insertQuery = @"INSERT INTO [dbo].[Clients]([ClientFullName], [ClientGender], 
@@ -376,7 +387,7 @@ namespace MarriageAgency.DAL.Services
                                                 @BodyType, @ClientCity, @ClientKids, @ClientHobbies, @ClientInformation, @RequirementID, 
                                                 @ProfilePhoto, @FetishID, @BirthDate)";
 
-                var result = db.Execute(insertQuery, new
+                db.Execute(insertQuery, new
                 {
                     userToAdd.ClientFullName,
                     userToAdd.ClientGender,
@@ -397,6 +408,78 @@ namespace MarriageAgency.DAL.Services
 
                 return true;
             }
+        }
+
+        private string CountZodiacSign(DateTime dateToCount)
+        {
+            int day = dateToCount.Day;
+            int month = dateToCount.Month;
+
+            switch (month)
+            {
+                case 1:
+                    if (day <= 19)
+                        return "Козерог";
+                    else
+                        return "Водолей";
+                case 2:
+                    if (day <= 18)
+                        return "Водолей";
+                    else
+                        return "Рыбы";
+                case 3:
+                    if (day <= 20)
+                        return "Водолей";
+                    else
+                        return "Овен";
+                case 4:
+                    if (day <= 19)
+                        return "Овен";
+                    else
+                        return "Телец";
+                case 5:
+                    if (day <= 20)
+                        return "Телец";
+                    else
+                        return "Близнецы";
+                case 6:
+                    if (day <= 20)
+                        return "Близнецы";
+                    else
+                        return "Cancer";
+                case 7:
+                    if (day <= 22)
+                        return "Рак";
+                    else
+                        return "Лев";
+                case 8:
+                    if (day <= 22)
+                        return "Лев";
+                    else
+                        return "Дева";
+                case 9:
+                    if (day <= 22)
+                        return "Дева";
+                    else
+                        return "Весы";
+                case 10:
+                    if (day <= 22)
+                        return "Весы";
+                    else
+                        return "Скорпион";
+                case 11:
+                    if (day <= 21)
+                        return "Скорпион";
+                    else
+                        return "Стрелец";
+                case 12:
+                    if (day <= 21)
+                        return "Стрелец";
+                    else
+                        return "Козерог";
+            }
+
+            return "";
         }
 
         public bool AuthorizeUser(string mail, string password)

@@ -53,30 +53,37 @@ namespace MarriageAgency_WebVersion.Controllers
             return Ok(_marriageAgencyService.SendInvitation(messageContent, messageReceiver));
         }
 
-        [HttpPatch]
+        /*[HttpPatch]
         [Route("UpdateRequirements")]
         public IActionResult UpdateRequirements([FromQuery] Requirement newRequirement)
         {
             return Ok();
-        }
+        }*/
 
-        [HttpDelete]
+        /*[HttpDelete]
         [Route("DeleteUser")]
         public IActionResult DeleteUser([FromQuery] int userId)
         {
             return Ok();
-        }
+        }*/
+
+        /*[HttpPost]
+        [Route("AddUser")]
+        public IActionResult AddUser([FromQuery] UserInputModel newUser)
+        {
+            return Ok(_marriageAgencyService.AddUser(newUser));
+        }*/
 
         [HttpPost]
         [Route("AddUser")]
-        public IActionResult AddUser([FromQuery] UserInputModel newUser)
+        public IActionResult AddUser([FromBody] User newUser)
         {
             return Ok(_marriageAgencyService.AddUser(newUser));
         }
 
         [HttpPost]
         [Route("AddRequirement")]
-        public IActionResult AddRequirements([FromQuery] Requirement newRequirement)
+        public IActionResult AddRequirements([FromBody] Requirement newRequirement)
         {
             return Ok(_marriageAgencyService.AddRequirement(newRequirement));
         }

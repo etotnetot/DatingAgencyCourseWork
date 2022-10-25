@@ -10,11 +10,11 @@
                 <Authorized>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="counter">Profile</NavLink>
+                        <NavLink class="nav-link" @onclick="GetProfilePageAsync" href="counter">Profile</NavLink>
                     </li>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="profiles"> Find</NavLink>
+                        <NavLink class="nav-link" href="profiles">Find</NavLink>
                     </li>
 
                     <li class="nav-item">
@@ -55,6 +55,12 @@
 </style>
 
 @code {
+    [Inject]
+    private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -62,5 +68,13 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    public async void GetProfilePageAsync()
+    {
+        var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+        var userName = currentState?.User?.Identity?.Name ?? "Noname";
+        navigationManager.NavigateTo(("/user/" + userName), true);
     }
 }

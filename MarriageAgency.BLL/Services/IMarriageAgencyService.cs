@@ -8,8 +8,6 @@ namespace MarriageAgency.BLL.Services
     {
         public Task<IEnumerable<User>> GetUsers();
 
-        public IEnumerable<UserViewModel> GetUsersViewModels();
-
         public Task<User> GetUserByName(string nameOfUser);
 
         public bool SendInvitation(string messageContent, string messageReceiver);
@@ -18,7 +16,7 @@ namespace MarriageAgency.BLL.Services
 
         public IEnumerable<User> GetCachedUsers();
 
-        public bool AddUser(UserInputModel userToAdd);
+        public bool AddUser(User userToAdd);
 
         public bool AddRequirement(Requirement requirementToAdd);
     }

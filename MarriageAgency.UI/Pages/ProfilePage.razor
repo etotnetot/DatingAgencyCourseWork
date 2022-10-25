@@ -2,7 +2,7 @@
 
 @if (UserToDisplay == null)
 {
-    <p><em>Loading...</em></p>
+    <p style="text-align:center;"><em>Loading...</em></p>
 }
 else
 {
@@ -10,11 +10,17 @@ else
         <div class="row">
             <div class="col-md-3 border-right picture">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" alt="Profile picture">
-                    <span class="font-weight-bold">@UserToDisplay.ClientFullName</span>
-                    <span class="text-black-50">@UserToDisplay.Email</span>
-                    <span> </span>
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Change picture</button></div>
+                    <img class="rounded-circle mt-5" width="300px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" alt="Profile picture">
+                    
+                    <span class="font-weight-bold" style="font-size: 30px; margin-top:10px;">
+                        @UserToDisplay.ClientFullName
+                    </span>
+
+                    <span class="text-black-50" style="font-size: 20px;">
+                        @UserToDisplay.Email
+                    </span>
+
+                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Change picture</button></div>*@
                     <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Send invitation</button></div>
                 </div>
             </div>
@@ -27,54 +33,38 @@ else
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@String.Join(" ", UserToDisplay.ClientFullName)[0]"></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@String.Join(" ", UserToDisplay.ClientFullName)[1]" placeholder="surname"></div>
+                        @*change neme displaying*@
+                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName.Split(' ')[0]"></div>
+                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@UserToDisplay.ClientFullName.Split(' ')[1]" placeholder="surname"></div>
                     </div>
 
                     <div class="row mt-3 inputs">
                         <div class="col-md-12">
-                            <label class="labels">Gender</label>
-                            <select>
-                                <option value="Yes">Мужской</option>
-                                <option value="No">Женский</option>
-                                <option value="No">Небинарный</option>
-                            </select>
+                            <label class="labels">Гендер</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.ClientGender" placeholder="your zodiac sign">
                         </div>
                         <div class="col-md-12">
-                            <label class="labels">Education</label>
-                            <select>
-                                <option value="Yes">Среднее</option>
-                                <option value="No">Среднее специальное</option>
-                                <option value="No">Высшее</option>
-                                <option value="No">Без образования</option>
-                            </select>
+                            <label class="labels">Образование</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.EducationID" placeholder="your zodiac sign">
                         </div>
                         <div class="col-md-12">
-                            <label for="labels">Bodytype:</label>
-                            <select name="body">
-                                <option value="Yes">Обычное</option>
-                                <option value="No">Атлетическое</option>
-                                <option value="No">Спортивное</option>
-                                <option value="No">Упитанное</option>
-                            </select>
+                            <label for="labels">Телосложение</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.BodyType" placeholder="your zodiac sign">
                         </div>
                         <div class="col-md-12">
-                            <label class="labels">Kids</label>
-                            <select>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
+                            <label class="labels">Дети</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.ClientKids" placeholder="your zodiac sign">
                         </div>
                         <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter your city" value="@UserToDisplay.ClientCity"></div>
                         <div class="col-md-12"><label class="labels">Hobbies</label><input type="text" class="form-control" placeholder="Hobbies" value="@UserToDisplay.ClientHobbies"></div>
                         <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>                    </div>
 
                     <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Date of birth</label><input type="datetime-local" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate"></div>
+                        <div class="col-md-6"><label class="labels">Date of birth</label><input type="date" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate.ToString("yyyy-MM-dd")"></div>
                         <div class="col-md-6"><label class="labels">Zodiac Sign</label><input type="text" class="form-control" value="@CountZodiacSign(UserToDisplay.BirthDate)" placeholder="your zodiac sign"></div>
                     </div>
 
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Save Profile</button></div>
+                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Save Profile</button></div>*@
                 </div>
 
             </div>
@@ -122,6 +112,10 @@ else
 
     .inputs {
         height: 600px;
+    }
+
+    .row {
+        font-family: 'Montserrat', sans-serif;
     }
 
 </style>

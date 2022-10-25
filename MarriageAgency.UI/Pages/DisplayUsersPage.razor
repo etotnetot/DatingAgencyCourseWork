@@ -4,7 +4,6 @@
 
     <h1>Available partners</h1>
 
-    @*<SearchBarComponent OnSearch="HandleSearch"></SearchBarComponent>*@
     <div class="search-bar">
         <input @bind="searchString" type="text" name="searchBar" placeholder="Find your love.." style="font-size: larger;" />
         <button type="button" class="btn btn-primary btn-lg" @onclick="@(()=> HandleSearch())" style="background-color: #e08255">
@@ -26,12 +25,12 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
     @if (UsersToDisplay == null)
      {
-        <p><em>Loading...</em></p>
+        <p style="text-align:center;"><em>Loading...</em></p>
      }
      else
      {    
          @foreach (var currentUser in UsersToDisplay)
-         {
+          {
              if (currentUser.Username != CurrentUser)
              {
                 <UserCardComponent CurrentUser="currentUser"></UserCardComponent>

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace MarriageAgency.UI.Services
 {
@@ -99,7 +100,7 @@ namespace MarriageAgency.UI.Services
 
         public async Task<bool> AddUser(UserInputModel userInputModel)
         {
-            var inputDataQuery = new Dictionary<string, string>()
+            /*var inputDataQuery = new Dictionary<string, string>()
             {
                 ["ClientFullName"] = userInputModel.User.ClientFullName,
                 ["ClientID"] = "0",
@@ -107,31 +108,63 @@ namespace MarriageAgency.UI.Services
                 ["ClientGender"] = userInputModel.User.ClientGender,
                 ["BirthDate"] = userInputModel.User.BirthDate.ToString("yyyy-MM-dd"),
                 ["Email"] = userInputModel.User.Email,
-                ["FetishID"] = userInputModel.User.FetishID.ToString(),
+                ["FetishID"] = "0",
                 ["ClientInformation"] = userInputModel.User.ClientInformation,
+
+                *//*["ProfilePhoto"] = Convert.ToBase64String(userInputModel.User.ProfilePhoto),*/
+                /*["ProfilePhoto"] = new StringValues(userInputModel.User.ProfilePhoto),*//*
+
                 ["ClientHobbies"] = userInputModel.User.ClientHobbies,
                 ["ClientKids"] = userInputModel.User.ClientKids,
                 ["EducationID"] = userInputModel.User.EducationID,
                 ["BodyType"] = userInputModel.User.BodyType,
                 ["ClientCity"] = userInputModel.User.ClientCity
-            };
+            };*/
 
-            var inputDataQueryRequirements = new Dictionary<string, string>()
+            /*var parameters = new[]
+            {
+                new KeyValuePair<string, string>("ClientFullName", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ClientHobbies", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ClientID", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ClientPassword", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ClientGender", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("BirthDate", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("Email", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("FetishID", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ClientInformation", userInputModel.User.ClientFullName),
+                new KeyValuePair<string, string>("ProfilePhoto", new StringValues(userInputModel.User.ProfilePhoto)),
+                new KeyValuePair<string, string>("ClientKids", userInputModel.User.ClientKids),
+                new KeyValuePair<string, string>("EducationID", userInputModel.User.EducationID),
+                new KeyValuePair<string, string>("BodyType", userInputModel.User.BodyType),
+                new KeyValuePair<string, string>("ClientCity", userInputModel.User.ClientCity)
+            };*/
+
+            /*var inputDataQueryRequirements = new Dictionary<string, string>()
             {
                 ["RequirementID"] = "0",
                 ["AgeFrom"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
-                ["AgeFrom"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
+                ["AgeTo"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
                 ["Education"] = userInputModel.RequirementOfUser.Education,
                 ["BodyType"] = userInputModel.RequirementOfUser.BodyType,
                 ["PartnerGender"] = userInputModel.RequirementOfUser.PartnerGender,
                 ["Kids"] = userInputModel.RequirementOfUser.Kids
-            };
+            };*/
 
-            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\AddUser", inputDataQuery);
-            var secondUriString = QueryHelpers.AddQueryString(@$"MainAgency\AddRequirement", inputDataQueryRequirements);
+            /*var secondUriString = QueryHelpers.AddQueryString(@$"MainAgency\AddRequirement", inputDataQueryRequirements);
+            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\AddUser", inputDataQuery);*/
 
-            var serverResponse = await _httpClient.GetAsync(uriString);
-            var secondServerResponse = await _httpClient.GetAsync(secondUriString);
+            var stringContentUser = new StringContent(System.Text.Json.JsonSerializer.Serialize(userInputModel.User),
+                Encoding.UTF8,
+                "application/json");
+            var stringContentReq = new StringContent(System.Text.Json.JsonSerializer.Serialize(userInputModel.RequirementOfUser),
+                Encoding.UTF8,
+                "application/json");
+
+            var secondServerResponse = await _httpClient.PostAsync(@$"MainAgency\AddRequirement", stringContentReq);
+            var serverResponse = await _httpClient.PostAsync(@$"MainAgency\AddUser", stringContentUser);
+
+            /*var serverResponse = await _httpClient.GetAsync(uriString);
+            var secondServerResponse = await _httpClient.GetAsync(secondUriString);*/
 
             if (!serverResponse.IsSuccessStatusCode || !secondServerResponse.IsSuccessStatusCode)
                 throw new ExternalException($"The response from the server was unsuccessful " +

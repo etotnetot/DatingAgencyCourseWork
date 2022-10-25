@@ -22,17 +22,6 @@ namespace MarriageAgency.BLL.Services
             _memoryCache = memoryCache;
         }
 
-        public IEnumerable<UserViewModel> GetUsersViewModels()
-        {
-            return new List<UserViewModel>()
-            {
-                new UserViewModel("dima", 4, "argo"),
-                new UserViewModel("dim", 4, "argo"),
-                new UserViewModel("di", 4, "argo"),
-                new UserViewModel("d", 4, "argo")
-            };
-        }
-
         public async Task<IEnumerable<User>> GetUsers()
         {
             var usersList = _memoryCache.Get<IEnumerable<User>>("users");
@@ -114,9 +103,10 @@ namespace MarriageAgency.BLL.Services
             return (currentDate - birthDate) / 10000;
         }
 
-        public bool AddUser(UserInputModel userToAdd)
+        public bool AddUser(User userToAdd)
         {
-            return _dataService.AddUser(userToAdd.User) && _dataService.AddRequirement(userToAdd.RequirementOfUser);
+            /*return _dataService.AddUser(userToAdd.User) && _dataService.AddRequirement(userToAdd.RequirementOfUser);*/
+            return _dataService.AddUser(userToAdd);
         }
 
         public bool AddRequirement(Requirement requirementToAdd)
