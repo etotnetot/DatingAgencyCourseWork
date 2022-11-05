@@ -14,6 +14,8 @@ namespace MarriageAgency.UI.Interfaces
 
         public Task<User> GetUserByName(string userName);
 
+        public Task<User> GetUserById(int id);
+
         public UserViewModel MapUser(User userToMap);
 
         public Task<bool> AddUser(UserInputModel userInputModel);

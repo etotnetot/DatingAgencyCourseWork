@@ -38,7 +38,6 @@ namespace MarriageAgency.UI.Components
             var desiredUser = await AgencyApiService.GetUserByName(CurrentLoginData.Username);
 
             if (CurrentLoginData.Password == desiredUser.ClientPassword)
-            /*if (CurrentLoginData.Password == "789")*/
             {
                 await LocalStorageService.SetAsync(nameof(SecurityToken), currentToken);
                 NavigationManager.NavigateTo(("/user/" + CurrentLoginData.Username), true);

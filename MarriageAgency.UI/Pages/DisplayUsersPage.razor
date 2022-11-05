@@ -6,23 +6,23 @@
 
     <div class="search-bar">
         <input @bind="searchString" type="text" name="searchBar" placeholder="Find your love.." style="font-size: larger;" />
-        <button type="button" class="btn btn-primary btn-lg" @onclick="@(()=> HandleSearch())" style="background-color: #e08255">
+        <button type="button" class="btn btn-primary btn-lg" @onclick="@(()=> HandleSearch())" style=" background-color: #9E7676; border: none;">
             Search
         </button>
     </div>
 
     <div class="wrap">
-        <button type="button" class="btn btn-primary btn-lg" @onclick="GetBestCandidates">
+        <button type="button" style="background: #4FA095; border: none;" btn btn-primary btn-lg" @onclick="GetBestCandidates">
             Find besties!
         </button>
-        <button type="button" class="btn btn-secondary btn-lg" @onclick="ShowAllUsers">
+        <button type="button" style="background: #9F73AB; border: none;" class="btn btn-secondary btn-lg" @onclick="ShowAllUsers">
             Show all
         </button>
     </div>
 
 </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row row-cols-1 row-cols-md-3 g-4" style="margin-top: 33px;">
     @if (UsersToDisplay == null)
      {
         <p style="text-align:center;"><em>Loading...</em></p>

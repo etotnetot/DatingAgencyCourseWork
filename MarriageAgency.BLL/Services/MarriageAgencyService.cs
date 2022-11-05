@@ -44,9 +44,25 @@ namespace MarriageAgency.BLL.Services
             var users = await GetUsers();
 
             if (_memoryCache.Get<IEnumerable<User>>("users") == null)
+            {
                 _memoryCache.Set("users", users);
+                GetInvitationsForAllUsers();
+            }
 
             return users.SingleOrDefault(user => user.ClientFullName == nameOfUser);
+        }
+
+        public async Task<User> GetUserById(int idOfUser)
+        {
+            var users = await GetUsers();
+
+            if (_memoryCache.Get<IEnumerable<User>>("users") == null)
+            {
+                _memoryCache.Set("users", users);
+                GetInvitationsForAllUsers();
+            }
+
+            return users.SingleOrDefault(user => user.ClientID == idOfUser);
         }
 
         public bool SendInvitation(string messageContent, string messageReceiver)
@@ -105,13 +121,34 @@ namespace MarriageAgency.BLL.Services
 
         public bool AddUser(User userToAdd)
         {
-            /*return _dataService.AddUser(userToAdd.User) && _dataService.AddRequirement(userToAdd.RequirementOfUser);*/
             return _dataService.AddUser(userToAdd);
         }
 
         public bool AddRequirement(Requirement requirementToAdd)
         {
             return _dataService.AddRequirement(requirementToAdd);
+        }
+
+        public async void GetInvitations(string userLogin)
+        {
+            var usersList = await GetUsers();
+            var CurrentUser = usersList.SingleOrDefault(user => user.ClientFullName == userLogin);
+
+            CurrentUser.SentInvitations = _dataService.GetInvitations().Where(i => i.Sender == CurrentUser.ClientID).ToList();
+            CurrentUser.MyInvitations = _dataService.GetInvitations().Where(i => i.Recipient == CurrentUser.ClientID).ToList();
+        }
+
+        public bool GetInvitationsForAllUsers()
+        {
+            var usersList = _memoryCache.Get<IEnumerable<User>>("users");
+
+            foreach (var item in usersList)
+            {
+                item.SentInvitations = _dataService.GetInvitations().Where(i => i.Sender == item.ClientID).ToList();
+                item.MyInvitations = _dataService.GetInvitations().Where(i => i.Recipient == item.ClientID).ToList();
+            }
+
+            return true;
         }
     }
 }

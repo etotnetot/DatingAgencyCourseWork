@@ -10,6 +10,8 @@ namespace MarriageAgency.BLL.Services
 
         public Task<User> GetUserByName(string nameOfUser);
 
+        public Task<User> GetUserById(int idOfUser);
+
         public bool SendInvitation(string messageContent, string messageReceiver);
 
         public Task<IEnumerable<User>> GetBestCandidates(string userLogin);
@@ -19,5 +21,7 @@ namespace MarriageAgency.BLL.Services
         public bool AddUser(User userToAdd);
 
         public bool AddRequirement(Requirement requirementToAdd);
+
+        public bool GetInvitationsForAllUsers();
     }
 }

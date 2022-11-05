@@ -45,34 +45,22 @@ namespace MarriageAgency_WebVersion.Controllers
 
             return Ok(res);
         }
-        
+
+        [HttpGet]
+        [Route("GetUserById")]
+        public async Task<IActionResult> GetUserById([FromQuery] int idOfUser)
+        {
+            var res = await _marriageAgencyService.GetUserById(idOfUser);
+
+            return Ok(res);
+        }
+
         [HttpPost]
         [Route("SendInvitation")]
         public IActionResult SendInvitation([FromQuery] string messageContent, string messageReceiver)
         {
             return Ok(_marriageAgencyService.SendInvitation(messageContent, messageReceiver));
         }
-
-        /*[HttpPatch]
-        [Route("UpdateRequirements")]
-        public IActionResult UpdateRequirements([FromQuery] Requirement newRequirement)
-        {
-            return Ok();
-        }*/
-
-        /*[HttpDelete]
-        [Route("DeleteUser")]
-        public IActionResult DeleteUser([FromQuery] int userId)
-        {
-            return Ok();
-        }*/
-
-        /*[HttpPost]
-        [Route("AddUser")]
-        public IActionResult AddUser([FromQuery] UserInputModel newUser)
-        {
-            return Ok(_marriageAgencyService.AddUser(newUser));
-        }*/
 
         [HttpPost]
         [Route("AddUser")]

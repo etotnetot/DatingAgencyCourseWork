@@ -98,6 +98,28 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<User>(apiResponse.Result);
         }
 
+        public async Task<User> GetUserById(int id)
+        {
+            var inputDataQuery = new Dictionary<string, string>()
+            {
+                ["idOfUser"] = id.ToString()
+            };
+
+            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\GetUserById", inputDataQuery);
+
+            var serverResponse = await _httpClient.GetAsync(uriString);
+
+            if (!serverResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+            };
+
+            var apiResponse = serverResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<User>(apiResponse.Result);
+        }
+
         public async Task<bool> AddUser(UserInputModel userInputModel)
         {
             /*var inputDataQuery = new Dictionary<string, string>()

@@ -99,53 +99,6 @@ namespace MarriageAgency.DAL.Services
             return true;
         }
 
-        public bool UpdateCoupleStatus(int userId)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                string updateQuery = @"UPDATE Couples SET CoupleStatus = 'Married' WHERE FirstClient = @FirstClient OR SecondClient = @FirstClient";
-
-                db.Execute(updateQuery, new { FirstClient = userId });
-            }
-
-            return true;
-        }
-
-        public bool DeleteCouple(int userId)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                string updateQuery = @"DELETE FROM Couples WHERE FirstClient = @FirstClient";
-
-                db.Execute(updateQuery, new
-                {
-                    FirstClient = userId,
-                });
-
-                return true;
-            }
-        }
-
-        public bool DeleteCoupleByID(int coupleId)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                string updateQuery = @"DELETE FROM Couples WHERE CoupleID = @CoupleID";
-                db.Execute(updateQuery, new
-                {
-                    CoupleID = coupleId,
-                });
-
-                return true;
-            }
-        }
-
         public bool DeleteRequirements(Requirement requirementToDelete)
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))

@@ -1,5 +1,5 @@
-﻿<nav class="navbar navbar-expand-sm navbar-light bg-light" style="justify-content: space-between;">
-    <a class="navbar-brand" href="" style="font-size:20px;">Marriage aGENcy</a>
+﻿<nav class="navbar navbar-expand-sm navbar-light" style="justify-content: space-between;">
+    <a class="navbar-brand" href="" style="font-size:23px;">Marriage aGENcy</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -18,7 +18,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="#">Invitations</NavLink>
+                        <NavLink class="nav-link" @onclick="GetInvitationsPageAsync" href="#">Invitations</NavLink>
                     </li>
 
                     <li class="nav-item">
@@ -37,6 +37,7 @@
 </nav>
 
 <style>
+
     .navbar {
         background-color: #6d9772 !important;
     }
@@ -52,6 +53,7 @@
     .navbar-brand {
         margin-left: 100px;
     }
+
 </style>
 
 @code {
@@ -60,6 +62,9 @@
 
     [Inject]
     private NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
 
     private bool collapseNavMenu = true;
 
@@ -76,5 +81,13 @@
 
         var userName = currentState?.User?.Identity?.Name ?? "Noname";
         navigationManager.NavigateTo(("/user/" + userName), true);
+    }
+
+    public async void GetInvitationsPageAsync()
+    {
+        var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+        var userName = currentState?.User?.Identity?.Name ?? "Noname";
+        navigationManager.NavigateTo(("/invitations/" + userName), true);
     }
 }

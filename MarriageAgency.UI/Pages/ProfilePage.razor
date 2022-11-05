@@ -1,17 +1,17 @@
 ﻿@page "/user/{userName}"
 
 @if (UserToDisplay == null)
-{
+ {
     <p style="text-align:center;"><em>Loading...</em></p>
-}
+ }
 else
 {
-    <div class="container rounded bg-white mt-5 mb-5">
+    <div class="container rounded bg-white mt-5 mb-5" style="width: 75%; box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);">
         <div class="row">
             <div class="col-md-3 border-right picture">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="300px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" alt="Profile picture">
-                    
+                    <img class="rounded-circle mt-5" width="300px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" style="box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);" alt="Profile picture">
+
                     <span class="font-weight-bold" style="font-size: 30px; margin-top:10px;">
                         @UserToDisplay.ClientFullName
                     </span>
@@ -20,10 +20,54 @@ else
                         @UserToDisplay.Email
                     </span>
 
-                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Change picture</button></div>*@
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Send invitation</button></div>
+                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Send invitation</button></div>*@
+                    <button class="btn btn-primary profile-button custom-btn" @onclick="@ModalShow">
+                        Отправить приглашение
+                    </button>
+
+                    @if (showModal)
+                     {
+                        <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Создание приглашения</h4>
+                                        <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="form-row">
+                                            <input type="text" name="company" class="company" id="company" placeholder="Кому" required>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <input type="text" name="company" class="company" id="company" placeholder="Место встречи" required>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <input type="date" min="1950-06-01"
+                                                   max="2005-06-30" id="birthdaytime" name="Birth date" @bind:format="yyyy-MM-dd">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" @onclick="@ModalCancel">Отмена</button>
+                                        <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#invitationModal">
+                                            Отправить приглашение
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                     }
+
                 </div>
             </div>
+
             <div class="col-md-5 border-right">
 
                 <div class="p-3 py-5 information">
@@ -33,10 +77,16 @@ else
                     </div>
 
                     <div class="row mt-2">
-                        @*change neme displaying*@
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName.Split(' ')[0]"></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@UserToDisplay.ClientFullName.Split(' ')[1]" placeholder="surname"></div>
-                    </div>
+                        @if (UserToDisplay.ClientFullName.Split(' ').Length == 1)
+                        {
+                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName"></div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName.Split(' ')[0]"></div>
+                            <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@UserToDisplay.ClientFullName.Split(' ')[1]" placeholder="surname"></div>
+                        }
+                </div>
 
                     <div class="row mt-3 inputs">
                         <div class="col-md-12">
@@ -63,8 +113,6 @@ else
                         <div class="col-md-6"><label class="labels">Date of birth</label><input type="date" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate.ToString("yyyy-MM-dd")"></div>
                         <div class="col-md-6"><label class="labels">Zodiac Sign</label><input type="text" class="form-control" value="@CountZodiacSign(UserToDisplay.BirthDate)" placeholder="your zodiac sign"></div>
                     </div>
-
-                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Save Profile</button></div>*@
                 </div>
 
             </div>
@@ -73,6 +121,14 @@ else
 }
 
 <style>
+
+    .container {
+        @*width: 89%;*@
+        margin: auto;
+        border-radius: 9px;
+        overflow: hidden;
+        @*box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);*@
+    }
 
     .row {
         background-color: #dee8b4 !important;
@@ -106,8 +162,10 @@ else
         background: #d8bcfc !important;
         border: none !important;
         color: black !important;
-        font-weight: 400 !important;
-        font-size: 20px !important;
+        font-weight: 600 !important;
+        font-size: 18px !important;
+        border-radius: 101px;
+        margin-top: 22px;
     }
 
     .inputs {
@@ -116,6 +174,30 @@ else
 
     .row {
         font-family: 'Montserrat', sans-serif;
+    }
+
+    .modal {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        height: 270px;
+        justify-content: space-around;
+        align-items: center;
+        background: #D2DAFF;
+    }
+
+    .modal-footer {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        background: #E1FFEE;
+    }
+
+    .modal-header {
+        background: #E1FFEE;
     }
 
 </style>
@@ -129,9 +211,21 @@ else
 
     public User UserToDisplay { get; set; }
 
+    private bool showModal = false;
+
     protected override async Task OnInitializedAsync()
     {
         UserToDisplay = await AgencyApiService.GetUserByName(UserName);
+    }
+
+    private void ModalShow() => showModal = true;
+
+    private void ModalCancel() => showModal = false;
+
+    private void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
     }
 
     private string CountZodiacSign(DateTime dateToCount)
