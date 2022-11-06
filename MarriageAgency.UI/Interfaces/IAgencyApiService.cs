@@ -19,5 +19,7 @@ namespace MarriageAgency.UI.Interfaces
         public UserViewModel MapUser(User userToMap);
 
         public Task<bool> AddUser(UserInputModel userInputModel);
+
+        public Task<bool> SendInvitation(Invitation invitationToSend);
     }
 }

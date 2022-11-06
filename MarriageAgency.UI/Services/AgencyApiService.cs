@@ -195,6 +195,22 @@ namespace MarriageAgency.UI.Services
             return true;
         }
 
+        public async Task<bool> SendInvitation(Invitation invitationToSend)
+        {
+            var stringContentInvitation = new StringContent(System.Text.Json.JsonSerializer.Serialize(invitationToSend),
+                Encoding.UTF8,
+                "application/json");
+
+            var serverResponse = await _httpClient.PostAsync(@$"MainAgency\SendInvitation", stringContentInvitation);
+
+            if (!serverResponse.IsSuccessStatusCode)
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+
+            return true;
+        }
+       
+
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers)
         {
             List<UserViewModel> mappedUsers = new();

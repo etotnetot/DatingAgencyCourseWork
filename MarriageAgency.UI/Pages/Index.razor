@@ -2,13 +2,12 @@
 
 <div class="welcome">
 
-    <h1>Authorization!</h1>
     <AuthorizeView>
         <Authorized>
-            Welcome @context.User.Identity.Name !
+            <ProfilePage UserName="@context.User.Identity.Name"/>
         </Authorized>
         <NotAuthorized>
-            You are not authorized. Go to <a href="/login">Login</a>
+            Вы не авторизованы. Перейдите по <a href="/login">ссылке</a>
         </NotAuthorized>
     </AuthorizeView>
 
@@ -20,6 +19,12 @@
         align-items: center;
         display: flex;
         flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
     }
 
 </style>
+
+@code {
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+}

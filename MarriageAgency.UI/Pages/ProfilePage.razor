@@ -1,9 +1,9 @@
 ﻿@page "/user/{userName}"
 
 @if (UserToDisplay == null)
- {
-    <p style="text-align:center;"><em>Loading...</em></p>
- }
+{
+    <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
+}
 else
 {
     <div class="container rounded bg-white mt-5 mb-5" style="width: 75%; box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);">
@@ -20,50 +20,84 @@ else
                         @UserToDisplay.Email
                     </span>
 
-                    @*<div class="mt-5 text-center"><button class="btn btn-primary profile-button custom-btn" type="button">Send invitation</button></div>*@
-                    <button class="btn btn-primary profile-button custom-btn" @onclick="@ModalShow">
-                        Отправить приглашение
-                    </button>
+                    @if (!invitationSent)
+                    {
+                        <button class="btn btn-primary profile-button custom-btn" @onclick="@ModalShow">
+                            Отправить приглашение
+                        </button>
+                    }
 
                     @if (showModal)
-                     {
+                    {
                         <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content" style="border: 0 !important;">
 
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Создание приглашения</h4>
-                                        <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                                    <EditForm Model="@InvitationToSend" OnValidSubmit="@ModalSuccessfulShow">
+                                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                                        <ValidationSummary></ValidationSummary>
+
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Создание приглашения</h4>
+                                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <div class="form-row">
+                                                <input type="text" placeholder="Кому" value="@UserToDisplay.ClientFullName" required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <input type="text" @bind="InvitationToSend.InvitationPlace" placeholder="Место встречи" required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="birthdaytime" name="Дата" @bind="InvitationToSend.InvitationDate" @bind:format="yyyy-MM-dd">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" @onclick="@ModalCancel">Отмена</button>
+                                            <button class="btn btn-secondary" type="button" @onclick="@ModalSuccessfulShow">
+                                                Отправить приглашение
+                                            </button>
+                                        </div>
+
+                                    </EditForm>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (showSuccessfulModal)
+                    {
+                        <div class="modal fade show" id="myModalSuccess" style="display:block" aria-modal="true" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="border: 0 !important;">
+
+                                    <div class="modal-header" style="background: #709474;">
+                                        <h4 class="modal-title">Приглашение отправлено!</h4>
+                                        <button type="button" class="close" @onclick="@ModalSuccessfulCancel">&times;</button>
                                     </div>
 
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="background-color: #0000; height: 200px;">
 
                                         <div class="form-row">
-                                            <input type="text" name="company" class="company" id="company" placeholder="Кому" required>
+
+                                            <img src="https://www.cnet.com/a/img/resize/18745075acf9e4ed11171d3398f09c29733866f3/hub/2022/10/15/4ee63290-986c-42c1-af30-1ab0e5ca6dd0/newemoji.png?auto=webp&width=1200"
+                                                 alt="ypu picure is here" class="img-fluid"
+                                                 style="width: 180px; border-radius: 10px;">
                                         </div>
 
-                                        <div class="form-row">
-                                            <input type="text" name="company" class="company" id="company" placeholder="Место встречи" required>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <input type="date" min="1950-06-01"
-                                                   max="2005-06-30" id="birthdaytime" name="Birth date" @bind:format="yyyy-MM-dd">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" @onclick="@ModalCancel">Отмена</button>
-                                        <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#invitationModal">
-                                            Отправить приглашение
-                                        </button>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                     }
+                    }
 
                 </div>
             </div>
@@ -86,7 +120,7 @@ else
                             <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName.Split(' ')[0]"></div>
                             <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="@UserToDisplay.ClientFullName.Split(' ')[1]" placeholder="surname"></div>
                         }
-                </div>
+                    </div>
 
                     <div class="row mt-3 inputs">
                         <div class="col-md-12">
@@ -107,10 +141,11 @@ else
                         </div>
                         <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter your city" value="@UserToDisplay.ClientCity"></div>
                         <div class="col-md-12"><label class="labels">Hobbies</label><input type="text" class="form-control" placeholder="Hobbies" value="@UserToDisplay.ClientHobbies"></div>
-                        <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>                    </div>
+                        <div class="col-md-12"><label class="labels">Information</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>
+                    </div>
 
                     <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Date of birth</label><input type="date" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate.ToString("yyyy-MM-dd")"></div>
+                        <div class="col-md-6"><label class="labels">Date of birth</label><input type="text" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate.ToString("dd-MM-yyyy")"></div>
                         <div class="col-md-6"><label class="labels">Zodiac Sign</label><input type="text" class="form-control" value="@CountZodiacSign(UserToDisplay.BirthDate)" placeholder="your zodiac sign"></div>
                     </div>
                 </div>
@@ -123,11 +158,9 @@ else
 <style>
 
     .container {
-        @*width: 89%;*@
         margin: auto;
         border-radius: 9px;
         overflow: hidden;
-        @*box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);*@
     }
 
     .row {
@@ -193,7 +226,7 @@ else
         align-items: center;
         display: flex;
         justify-content: space-between;
-        background: #E1FFEE;
+        background: #D2DAFF;
     }
 
     .modal-header {
@@ -206,15 +239,27 @@ else
     [Inject]
     public IAgencyApiService AgencyApiService { get; set; }
 
+    [Inject]
+    private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
     [Parameter]
     public string UserName { get; set; }
 
     public User UserToDisplay { get; set; }
 
+    public Invitation InvitationToSend { get; set; }
+
+    @*public string CurrentUserName { get; set; }*@
+
     private bool showModal = false;
+
+    private bool showSuccessfulModal = false;
+
+    private bool invitationSent = false;
 
     protected override async Task OnInitializedAsync()
     {
+        InvitationToSend = new Invitation();
         UserToDisplay = await AgencyApiService.GetUserByName(UserName);
     }
 
@@ -226,6 +271,33 @@ else
     {
         Console.WriteLine("Modal ok");
         showModal = false;
+    }
+
+    private async void SendInvitation()
+    {
+        InvitationToSend.Recipient = UserToDisplay.ClientID;
+
+        var name = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = await AgencyApiService.GetUserByName(name.User.Identity.Name);
+        InvitationToSend.Sender = currentUser.ClientID;
+
+        await AgencyApiService.SendInvitation(InvitationToSend);
+    }
+
+    private void ModalSuccessfulShow()
+    {
+        Task.Delay(1000);
+        SendInvitation();
+
+        invitationSent = true;
+        showModal = false;
+        showSuccessfulModal = true;
+    }
+
+    private void ModalSuccessfulCancel()
+    {
+        showModal = false;
+        showSuccessfulModal = false;
     }
 
     private string CountZodiacSign(DateTime dateToCount)

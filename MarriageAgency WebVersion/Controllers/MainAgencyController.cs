@@ -57,9 +57,9 @@ namespace MarriageAgency_WebVersion.Controllers
 
         [HttpPost]
         [Route("SendInvitation")]
-        public IActionResult SendInvitation([FromQuery] string messageContent, string messageReceiver)
+        public IActionResult SendInvitation([FromBody] Invitation invitationToSent)
         {
-            return Ok(_marriageAgencyService.SendInvitation(messageContent, messageReceiver));
+            return Ok(_marriageAgencyService.SendInvitation(invitationToSent));
         }
 
         [HttpPost]

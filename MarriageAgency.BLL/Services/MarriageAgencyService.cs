@@ -65,9 +65,14 @@ namespace MarriageAgency.BLL.Services
             return users.SingleOrDefault(user => user.ClientID == idOfUser);
         }
 
-        public bool SendInvitation(string messageContent, string messageReceiver)
+        public bool SendInvitation(Invitation invitationToSend)
         {
-            return true;
+            var usersList = _memoryCache.Get<IEnumerable<User>>("users");
+
+            usersList.ToList().Find(x => x.ClientID == invitationToSend.Sender).SentInvitations.Add(invitationToSend);
+            usersList.ToList().Find(x => x.ClientID == invitationToSend.Recipient).MyInvitations.Add(invitationToSend);
+
+            return _dataService.AddInvitation(invitationToSend);
         }
 
         public async Task<IEnumerable<User>> GetBestCandidates(string userLogin)

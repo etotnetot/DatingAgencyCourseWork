@@ -12,9 +12,10 @@
     </div>
 
     <div class="wrap">
-        <button type="button" style="background: #4FA095; border: none;" btn btn-primary btn-lg" @onclick="GetBestCandidates">
+        <button type="button" class="btn btn-primary btn-lg" style="background: #4FA095; border: none;" @onclick="GetBestCandidates">
             Find besties!
         </button>
+
         <button type="button" style="background: #9F73AB; border: none;" class="btn btn-secondary btn-lg" @onclick="ShowAllUsers">
             Show all
         </button>
@@ -25,7 +26,7 @@
 <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-top: 33px;">
     @if (UsersToDisplay == null)
      {
-        <p style="text-align:center;"><em>Loading...</em></p>
+        <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
      }
      else
      {    

@@ -12,7 +12,7 @@ namespace MarriageAgency.BLL.Services
 
         public Task<User> GetUserById(int idOfUser);
 
-        public bool SendInvitation(string messageContent, string messageReceiver);
+        public bool SendInvitation(Invitation invitationToSend);
 
         public Task<IEnumerable<User>> GetBestCandidates(string userLogin);
 
