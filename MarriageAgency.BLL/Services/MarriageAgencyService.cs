@@ -24,14 +24,7 @@ namespace MarriageAgency.BLL.Services
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            var usersList = _memoryCache.Get<IEnumerable<User>>("users");
-
-            if (usersList == null)
-            {
-                return await _dataService.GetUsers();
-            }
-
-            return usersList;
+            return await _dataService.GetUsers();
         }
 
         public IEnumerable<User> GetCachedUsers()
@@ -41,6 +34,18 @@ namespace MarriageAgency.BLL.Services
 
         public async Task<User> GetUserByName(string nameOfUser)
         {
+            if (_memoryCache.Get<IEnumerable<User>>("users") == null)
+            {
+                var users = await GetUsers();
+                _memoryCache.Set("users", users);
+                GetInvitationsForAllUsers();
+            }
+
+            return _memoryCache.Get<IEnumerable<User>>("users").SingleOrDefault(user => user.ClientFullName == nameOfUser);
+        }
+
+        public async Task<User> GetUserByEmail(string nameOfUser)
+        {
             var users = await GetUsers();
 
             if (_memoryCache.Get<IEnumerable<User>>("users") == null)
@@ -49,7 +54,7 @@ namespace MarriageAgency.BLL.Services
                 GetInvitationsForAllUsers();
             }
 
-            return users.SingleOrDefault(user => user.ClientFullName == nameOfUser);
+            return users.SingleOrDefault(user => user.Email == nameOfUser);
         }
 
         public async Task<User> GetUserById(int idOfUser)
@@ -124,9 +129,15 @@ namespace MarriageAgency.BLL.Services
             return (currentDate - birthDate) / 10000;
         }
 
-        public bool AddUser(User userToAdd)
+        public async Task<bool> AddUser(User userToAdd)
         {
-            return _dataService.AddUser(userToAdd);
+            _dataService.AddUser(userToAdd);
+
+            var users = await GetUsers();
+            _memoryCache.Set("users", users);
+            GetInvitationsForAllUsers();
+
+            return true;
         }
 
         public bool AddRequirement(Requirement requirementToAdd)
@@ -145,13 +156,19 @@ namespace MarriageAgency.BLL.Services
 
         public bool GetInvitationsForAllUsers()
         {
-            var usersList = _memoryCache.Get<IEnumerable<User>>("users");
+            var usersList = _memoryCache.Get<IEnumerable<User>>("users").ToList();
 
-            foreach (var item in usersList)
+            /*foreach (var item in usersList)
             {
                 item.SentInvitations = _dataService.GetInvitations().Where(i => i.Sender == item.ClientID).ToList();
                 item.MyInvitations = _dataService.GetInvitations().Where(i => i.Recipient == item.ClientID).ToList();
-            }
+            }*/
+
+            usersList.ForEach(item =>
+            {
+                item.SentInvitations = _dataService.GetInvitations().Where(i => i.Sender == item.ClientID).ToList();
+                item.MyInvitations = _dataService.GetInvitations().Where(i => i.Recipient == item.ClientID).ToList();
+            });
 
             return true;
         }

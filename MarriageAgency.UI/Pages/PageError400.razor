@@ -1,0 +1,41 @@
+﻿@page "/error"
+@inject NavigationManager navigationManager
+
+<div class="flex-wrap">
+
+    <div class="img-hover-zoom">
+        <img src="https://i.imgur.com/GpY6bTJ.png"
+             alt="Sad(" class="img-fluid"
+             style="width: 400px; border-radius: 10px;"
+             @onclick="@(()=> navigationManager.NavigateTo("/login"))">
+    </div>
+    
+</div>
+
+<style>
+
+    .img-hover-zoom {
+        height: 300px;
+    }
+
+    .img-hover-zoom img {
+        transition: transform .5s ease;
+    }
+
+    .img-hover-zoom:hover img {
+        transform: scale(1.5);
+    }
+
+    .flex-wrap {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 210px;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+</style>
+
+@code {
+
+}

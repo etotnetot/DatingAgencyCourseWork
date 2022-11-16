@@ -47,6 +47,15 @@ namespace MarriageAgency_WebVersion.Controllers
         }
 
         [HttpGet]
+        [Route("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([FromQuery] string nameOfUser)
+        {
+            var res = await _marriageAgencyService.GetUserByEmail(nameOfUser);
+
+            return Ok(res);
+        }
+
+        [HttpGet]
         [Route("GetUserById")]
         public async Task<IActionResult> GetUserById([FromQuery] int idOfUser)
         {
@@ -64,9 +73,9 @@ namespace MarriageAgency_WebVersion.Controllers
 
         [HttpPost]
         [Route("AddUser")]
-        public IActionResult AddUser([FromBody] User newUser)
+        public async Task<IActionResult> AddUser([FromBody] User newUser)
         {
-            return Ok(_marriageAgencyService.AddUser(newUser));
+            return Ok(await _marriageAgencyService.AddUser(newUser));
         }
 
         [HttpPost]

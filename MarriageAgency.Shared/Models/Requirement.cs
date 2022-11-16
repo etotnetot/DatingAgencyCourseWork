@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MarriageAgency.Shared.Models
 {
@@ -7,16 +8,24 @@ namespace MarriageAgency.Shared.Models
     {
         public int RequirementID { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string PartnerGender { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
+        [Range(18, 99, ErrorMessage = "Минимальный возраст от 18!")]
         public int AgeFrom { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
+        [Range(18, 99, ErrorMessage = "Максимальный возраст до 18!")]
         public int AgeTo { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string BodyType { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string Kids { get; set; }
 
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string Education { get; set; }
 
         public Requirement() { }

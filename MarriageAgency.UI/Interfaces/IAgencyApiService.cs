@@ -8,11 +8,15 @@ namespace MarriageAgency.UI.Interfaces
     {
         public Task<IEnumerable<User>> GetUsers(string queryAction);
 
+        public Task<List<UserViewModel>> GetUsersMapped(string queryAction);
+
         public List<UserViewModel> MapUsers(IEnumerable<User> currentUsers);
 
         public Task<IEnumerable<User>> GetBestCandidates(string userName);
 
         public Task<User> GetUserByName(string userName);
+
+        public Task<User> GetUserByEmail(string userName);
 
         public Task<User> GetUserById(int id);
 

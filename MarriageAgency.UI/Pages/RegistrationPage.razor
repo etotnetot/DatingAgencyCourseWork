@@ -8,7 +8,7 @@
         <div class="form-detail" id="myform">
             <div class="form-left">
 
-                <h2>Personal information</h2>
+                <h2>Персональная информация</h2>
 
                 <div class="form-group">
                     <div class="form-row form-row-1">
@@ -97,7 +97,7 @@
             </div>
 
             <div class="form-right">
-                <h2>Partner requirements</h2>
+                <h2>Требования к партнеру</h2>
 
                 <div class="form-row">
                     <input type="text" name="street" @bind="_userInputModel.RequirementOfUser.AgeFrom" class="street" id="street" placeholder="Минимальный возраст (введите число)" required>
@@ -164,7 +164,7 @@
                 </div>
 
                 <div class="form-row-last" id="button-register">
-                    <input type="submit" name="register" value="Register" style="background-color: cadetblue; border-radius: 21px; width: 225px;">
+                    <input type="submit" name="register" value="Регистрация" style="background-color: cadetblue; border-radius: 21px; width: 225px;">
                 </div>
 
             </div>
@@ -197,6 +197,7 @@
 
     private async Task HandlePhotoSelection(InputFileChangeEventArgs eventArgs)
     {
+        await Task.Delay(1000);
         var selectedFile = eventArgs.File;
         var buffers = new byte[selectedFile.Size];
 

@@ -27,7 +27,6 @@ namespace MarriageAgency.UI.Components
 
         protected async Task LoginAsync()
         {
-            Task.Delay(10000);
             var currentToken = new SecurityToken()
             {
                 AccessToken = CurrentLoginData.Password,
@@ -35,13 +34,18 @@ namespace MarriageAgency.UI.Components
                 ExpiredAt = DateTime.UtcNow.AddDays(1)
             };
 
+            await Task.Delay(1000);
             var desiredUser = await AgencyApiService.GetUserByName(CurrentLoginData.Username);
 
             if (CurrentLoginData.Password == desiredUser.ClientPassword)
             {
                 await LocalStorageService.SetAsync(nameof(SecurityToken), currentToken);
-                NavigationManager.NavigateTo(("/user/" + CurrentLoginData.Username), true);
-            }  
+                NavigationManager.NavigateTo(("/user/" + CurrentLoginData.Username + "/" + false), true);
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/error");
+            }
         }
     }
 }

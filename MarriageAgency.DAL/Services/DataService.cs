@@ -19,7 +19,6 @@ namespace MarriageAgency.DAL.Services
             var rList = await GetUserRequirements();
             var reqList = rList.ToList();
 
-            /*var fetishList = GetUserFetishes();*/
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 SqlMapper.AddTypeHandler(new DapperRequirementTypeHandler());
@@ -37,9 +36,7 @@ namespace MarriageAgency.DAL.Services
                             INNER JOIN Fetishes f ON c.FetishID = f.FetishID";
                 var users = db.Query<User, Requirement, Fetish, User>(sqlExpression, (user, requirement, fetish) => {
                     user.RequirementID = reqList.SingleOrDefault(req => req.RequirementID.Equals(requirement.RequirementID));
-
                     user.FetishID = new Fetish();
-                    /*user.FetishID = fetishList.SingleOrDefault(fet => fet.FetishID.Equals(fetish.FetishID));*/
 
                     return user;
                 }, splitOn: "RequirementID, FetishID").ToList();
@@ -74,44 +71,6 @@ namespace MarriageAgency.DAL.Services
 
                 return db.Query<Invitation>("SELECT * FROM Invitations").ToList();
             }
-        }
-
-        public bool UpdateRequirements(Requirement requirementToAdd)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                string updateQuery = @"UPDATE [dbo].[PartnerRequirements] SET PartnerGender = @PartnerGender,
-                AgeFrom = @AgeFrom, AgeTo = @AgeTo, BodyType = @BodyType, Kids = @Kids, Education = @Education
-                WHERE RequirementID = @RequirementID";
-
-                var result = db.Execute(updateQuery, new
-                {
-                    requirementToAdd.RequirementID,
-                    requirementToAdd.PartnerGender,
-                    requirementToAdd.AgeFrom,
-                    requirementToAdd.AgeTo,
-                    requirementToAdd.BodyType,
-                    requirementToAdd.Kids,
-                    requirementToAdd.Education
-                });
-            }
-
-            return true;
-        }
-
-        public bool DeleteRequirements(Requirement requirementToDelete)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                string updateQuery = @"DELETE FROM PartnerRequirements WHERE RequirementID = @RequirementID";
-
-                db.Execute(updateQuery, new
-                {
-                    requirementToDelete.RequirementID,
-                });
-            }
-
-            return true;
         }
 
         public async Task<IEnumerable<Requirement>> GetUserRequirements()
@@ -447,35 +406,6 @@ namespace MarriageAgency.DAL.Services
             return dataTable.Rows.Count == 1;
         }
 
-        public bool AddCouple(User firstUser, User secondUser)
-        {
-            using (IDbConnection dataBase = new SqlConnection(ConnectionString))
-            {
-                string insertQuery = @"INSERT INTO [dbo].[Couples] ([FirstClient], [SecondClient], [CoupleStatus])
-                                        VALUES (@FirstClient, @SecondClient, @CoupleStatus)";
-
-                var result = dataBase.Execute(insertQuery, new
-                {
-                    FirstClient = firstUser.ClientID,
-                    SecondClient = secondUser.ClientID,
-                    CoupleStatus = "NotMarried"
-                });
-
-                return true;
-            }
-        }
-
-        public List<Couple> GetCouples()
-        {
-            using (IDbConnection dataBase = new SqlConnection(ConnectionString))
-            {
-                if (dataBase.State == ConnectionState.Closed)
-                    dataBase.Open();
-
-                return dataBase.Query<Couple>("SELECT * FROM Couples").ToList();
-            }
-        }
-
         public bool DeleteInvitation(User userToDelete)
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
@@ -491,32 +421,6 @@ namespace MarriageAgency.DAL.Services
                 });
 
                 return true;
-            }
-        }
-
-        public Couple GetUserCouple(int id)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                string currentQuery = "SELECT * FROM Couples WHERE FirstClient = @FirstClient";
-
-                return db.QuerySingleOrDefault<Couple>(currentQuery, new { FirstClient = id });
-            }
-        }
-
-        public Couple GetCoupleIfRelationship(int id)
-        {
-            using (IDbConnection db = new SqlConnection(ConnectionString))
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                string currentQuery = "SELECT * FROM Couples WHERE SecondClient = @SecondClient";
-
-                return db.QuerySingleOrDefault<Couple>(currentQuery, new { SecondClient = id });
             }
         }
 

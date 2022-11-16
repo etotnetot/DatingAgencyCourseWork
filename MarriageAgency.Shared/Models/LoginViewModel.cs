@@ -5,11 +5,11 @@ namespace MarriageAgency.Shared.Models
     public class LoginViewModel
     {
         [Required]
-        [StringLength(50, ErrorMessage = "User name is too long!")]
+        [StringLength(50, ErrorMessage = "Имя пользователя слишком длинное!")]
         public string Username { get; set; }
 
         [Required]
-        [StringLength(10, ErrorMessage = "Password is too long!")]
+        [StringLength(20, ErrorMessage = "Пароль слишком длинный!")]
         public string Password { get; set; }
     }
 }

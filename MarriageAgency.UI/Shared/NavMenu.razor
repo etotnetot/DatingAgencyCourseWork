@@ -80,7 +80,7 @@
         var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
 
         var userName = currentState?.User?.Identity?.Name ?? "Noname";
-        navigationManager.NavigateTo(("/user/" + userName), true);
+        navigationManager.NavigateTo(("/user/" + userName + "/" + false), true);
     }
 
     public async void GetInvitationsPageAsync()

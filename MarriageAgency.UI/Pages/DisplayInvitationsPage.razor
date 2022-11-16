@@ -21,10 +21,6 @@
                                 Recipient="@Receiver"
                                 Sender="меня"
                                 imageUrl="@ReceiverImageUrl" />
-                <InvitationCard CurrentInvitation="@item"
-                                Recipient="@Receiver"
-                                Sender="меня"
-                                imageUrl="@ReceiverImageUrl" />
             }
         }
 
@@ -43,8 +39,8 @@
             @foreach (var item in CurrentUser.MyInvitations)
             {
                 GetNameOfSender(item.Sender);
-                <InvitationCard CurrentInvitation="@item" 
-                                Recipient="мне" 
+                <InvitationCard CurrentInvitation="@item"
+                                Recipient="мне"
                                 Sender="@Sender"
                                 imageUrl="@SenderImageUrl"/>
             }

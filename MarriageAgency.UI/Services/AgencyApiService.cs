@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using System.Linq;
 
 namespace MarriageAgency.UI.Services
 {
@@ -24,6 +25,7 @@ namespace MarriageAgency.UI.Services
         public AgencyApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(dest => dest.Username, act => act.MapFrom(src => src.ClientFullName))
@@ -50,8 +52,25 @@ namespace MarriageAgency.UI.Services
             };
 
             var apiResponse = serverResponse.Content.ReadAsStringAsync();
-            
-            return JsonConvert.DeserializeObject<IEnumerable<User>>(apiResponse.Result);
+
+            //txtBlock.Text = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<IEnumerable<User>>(await apiResponse);
+        }
+
+        public async Task<List<UserViewModel>> GetUsersMapped(string queryAction)
+        {
+            var serverResponse = await _httpClient.GetAsync(@$"MainAgency\{queryAction}");
+
+            if (!serverResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+            };
+
+            var apiResponse = serverResponse.Content.ReadAsStringAsync();
+
+            return MapUsers(JsonConvert.DeserializeObject<IEnumerable<User>>(apiResponse.Result));
         }
 
         public async Task<IEnumerable<User>> GetBestCandidates(string userName)
@@ -98,6 +117,28 @@ namespace MarriageAgency.UI.Services
             return JsonConvert.DeserializeObject<User>(apiResponse.Result);
         }
 
+        public async Task<User> GetUserByEmail(string userName)
+        {
+            var inputDataQuery = new Dictionary<string, string>()
+            {
+                ["nameOfUser"] = userName
+            };
+
+            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\GetUserByEmail", inputDataQuery);
+
+            var serverResponse = await _httpClient.GetAsync(uriString);
+
+            if (!serverResponse.IsSuccessStatusCode)
+            {
+                throw new ExternalException($"The response from the server was unsuccessful " +
+                    $"due to the following reason: {serverResponse.ReasonPhrase}");
+            };
+
+            var apiResponse = serverResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<User>(apiResponse.Result);
+        }
+
         public async Task<User> GetUserById(int id)
         {
             var inputDataQuery = new Dictionary<string, string>()
@@ -122,59 +163,6 @@ namespace MarriageAgency.UI.Services
 
         public async Task<bool> AddUser(UserInputModel userInputModel)
         {
-            /*var inputDataQuery = new Dictionary<string, string>()
-            {
-                ["ClientFullName"] = userInputModel.User.ClientFullName,
-                ["ClientID"] = "0",
-                ["ClientPassword"] = userInputModel.User.ClientPassword,
-                ["ClientGender"] = userInputModel.User.ClientGender,
-                ["BirthDate"] = userInputModel.User.BirthDate.ToString("yyyy-MM-dd"),
-                ["Email"] = userInputModel.User.Email,
-                ["FetishID"] = "0",
-                ["ClientInformation"] = userInputModel.User.ClientInformation,
-
-                *//*["ProfilePhoto"] = Convert.ToBase64String(userInputModel.User.ProfilePhoto),*/
-                /*["ProfilePhoto"] = new StringValues(userInputModel.User.ProfilePhoto),*//*
-
-                ["ClientHobbies"] = userInputModel.User.ClientHobbies,
-                ["ClientKids"] = userInputModel.User.ClientKids,
-                ["EducationID"] = userInputModel.User.EducationID,
-                ["BodyType"] = userInputModel.User.BodyType,
-                ["ClientCity"] = userInputModel.User.ClientCity
-            };*/
-
-            /*var parameters = new[]
-            {
-                new KeyValuePair<string, string>("ClientFullName", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ClientHobbies", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ClientID", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ClientPassword", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ClientGender", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("BirthDate", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("Email", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("FetishID", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ClientInformation", userInputModel.User.ClientFullName),
-                new KeyValuePair<string, string>("ProfilePhoto", new StringValues(userInputModel.User.ProfilePhoto)),
-                new KeyValuePair<string, string>("ClientKids", userInputModel.User.ClientKids),
-                new KeyValuePair<string, string>("EducationID", userInputModel.User.EducationID),
-                new KeyValuePair<string, string>("BodyType", userInputModel.User.BodyType),
-                new KeyValuePair<string, string>("ClientCity", userInputModel.User.ClientCity)
-            };*/
-
-            /*var inputDataQueryRequirements = new Dictionary<string, string>()
-            {
-                ["RequirementID"] = "0",
-                ["AgeFrom"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
-                ["AgeTo"] = userInputModel.RequirementOfUser.AgeFrom.ToString(),
-                ["Education"] = userInputModel.RequirementOfUser.Education,
-                ["BodyType"] = userInputModel.RequirementOfUser.BodyType,
-                ["PartnerGender"] = userInputModel.RequirementOfUser.PartnerGender,
-                ["Kids"] = userInputModel.RequirementOfUser.Kids
-            };*/
-
-            /*var secondUriString = QueryHelpers.AddQueryString(@$"MainAgency\AddRequirement", inputDataQueryRequirements);
-            var uriString = QueryHelpers.AddQueryString(@$"MainAgency\AddUser", inputDataQuery);*/
-
             var stringContentUser = new StringContent(System.Text.Json.JsonSerializer.Serialize(userInputModel.User),
                 Encoding.UTF8,
                 "application/json");
@@ -215,11 +203,11 @@ namespace MarriageAgency.UI.Services
         {
             List<UserViewModel> mappedUsers = new();
 
-            foreach (var user in currentUsers)
+            currentUsers.ToList().ForEach(item =>
             {
-                var mappedUser = mapperInstance.Map<UserViewModel>(user);
+                var mappedUser = mapperInstance.Map<UserViewModel>(item);
                 mappedUsers.Add(mappedUser);
-            }
+            });
 
             return mappedUsers;
         }

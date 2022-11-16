@@ -9,34 +9,34 @@ namespace MarriageAgency.Shared.Models
     {
         public int ClientID { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientFullName { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientGender { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientPassword { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string EducationID { get; set; }
 
         public string ZodiacSign { get; set; }
 
         public string BodyType { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientCity { get; set; }
 
         public string ClientKids { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientHobbies { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public string ClientInformation { get; set; }
 
         public Requirement RequirementID { get; set; }
@@ -45,7 +45,7 @@ namespace MarriageAgency.Shared.Models
 
         public Fetish FetishID { get; set; }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Это поле не может быть пустым!")]
         public DateTime BirthDate { get; set; }
 
         public virtual List<Invitation> MyInvitations { get; set; }
