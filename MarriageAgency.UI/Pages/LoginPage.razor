@@ -1,0 +1,104 @@
+﻿@page "/login"
+
+@inject NavigationManager navigationManager 
+@inherits LoginModel
+@using MarriageAgency.UI.Components
+
+<div class="row">
+    <div class="form col-md-6 offset-md-6">
+
+        <h1>Log In</h1>
+
+        <EditForm Model="@CurrentLoginData" OnValidSubmit="LoginAsync" style="width:350px;">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+
+            <label for="Username">Username</label>
+            <InputText id="Username" @bind-Value="CurrentLoginData.Username" class="form-control" />
+            <label for="Password">Password</label>
+            <InputText id="Password" @bind-Value="CurrentLoginData.Password" class="form-control" />
+
+            <p class="button my-4">
+                <button type="submit" class="my-btn btn btn-primary">Log In</button>
+            </p>
+
+            <p class="button my-4">
+                <p id="text">Don't have an account?</p>
+                <button @onclick="@(()=> navigationManager.NavigateTo("/registration"))" class="my-btn btn btn-primary">
+                    Register
+                </button>
+            </p>
+
+        </EditForm>
+
+    </div>
+</div>
+
+<style>
+
+    .invitation {
+        font-family: 'Montserrat', sans-serif !important;
+        background: #bee0ec;
+        border: 0 !important;
+    }
+
+    #text {
+        justify-content: center;
+        display: flex;
+    }
+
+    .form {
+        align-items: center;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+    }
+
+    .button {
+        display: grid;
+    }
+
+    .my-btn {
+        background-color: #383434 !important;
+    }
+
+    .modal {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        height: 270px;
+        justify-content: space-around;
+        align-items: center;
+        background: #D2DAFF;
+    }
+
+    .modal-footer {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        background: #E1FFEE;
+    }
+
+    .modal-header {
+        background: #E1FFEE;
+    }
+
+</style>
+
+@code {
+    bool showModal = false;
+
+    void ModalShow() => showModal = true;
+
+    void ModalCancel() => showModal = false;
+
+    void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
+}

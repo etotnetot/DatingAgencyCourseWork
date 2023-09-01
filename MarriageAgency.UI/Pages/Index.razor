@@ -1,0 +1,30 @@
+﻿@page "/"
+
+<div class="welcome">
+
+    <AuthorizeView>
+        <Authorized>
+            <ProfilePage UserName="@context.User.Identity.Name"/>
+        </Authorized>
+        <NotAuthorized>
+            Вы не авторизованы. Перейдите по <a href="/login">ссылке</a>
+        </NotAuthorized>
+    </AuthorizeView>
+
+</div>
+
+<style>
+
+    .welcome {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+</style>
+
+@code {
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+}

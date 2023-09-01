@@ -1,0 +1,117 @@
+﻿@page "/invitations/{CurrentUserName}"
+
+<div class="flex-wrap invitations-page">
+
+    <h3 style="text-align: center;">Ваши приглашения</h3>
+
+    <div class="overflow-auto sent">
+
+        <h5>Отправленные</h5>
+
+        @if (CurrentUser == null)
+        {
+            <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
+        }
+        else
+        {
+            @foreach (var item in CurrentUser.SentInvitations)
+            {
+                GetNameOfRecipient(item.Recipient);
+                <InvitationCard CurrentInvitation="@item"
+                                Recipient="@Receiver"
+                                Sender="меня"
+                                imageUrl="@ReceiverImageUrl" />
+            }
+        }
+
+    </div>
+
+    <div class="overflow-auto received">
+
+        <h5>Входящие</h5>
+
+        @if (CurrentUser == null)
+        {
+            <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
+        }
+        else
+        {
+            @foreach (var item in CurrentUser.MyInvitations)
+            {
+                GetNameOfSender(item.Sender);
+                <InvitationCard CurrentInvitation="@item"
+                                Recipient="мне"
+                                Sender="@Sender"
+                                imageUrl="@SenderImageUrl"/>
+            }
+        }
+
+    </div>
+
+</div>
+
+<style>
+
+    .invitations-page {
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 15px;
+    }
+
+    .sent {
+        height: 290px;
+    }
+
+    .received {
+        height: 290px;
+    }
+
+</style>
+
+@code {
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
+    [Parameter]
+    public User CurrentUser { get; set; }
+
+    [Parameter]
+    public string CurrentUserName { get; set; }
+
+    private string Receiver { get; set; }
+
+    private string ReceiverImageUrl { get; set; }
+
+    private string Sender { get; set; }
+
+    private string SenderImageUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = await AgencyApiService.GetUserByName(CurrentUserName);
+    }
+
+    private async void GetNameOfRecipient(int id)
+    {
+        var user = await AgencyApiService.GetUserById(id);
+
+        ReceiverImageUrl = ConvertImageToUrl(user.ProfilePhoto);
+        Receiver = user.ClientFullName;
+        StateHasChanged();
+    }
+
+    private async void GetNameOfSender(int id)
+    {
+        var user = await AgencyApiService.GetUserById(id);
+
+        SenderImageUrl = ConvertImageToUrl(user.ProfilePhoto);
+        Sender = user.ClientFullName;
+    }
+
+    private string ConvertImageToUrl(byte[] imageToConvert)
+    {
+        return "data:image;base64," + Convert.ToBase64String(imageToConvert);
+    }
+}

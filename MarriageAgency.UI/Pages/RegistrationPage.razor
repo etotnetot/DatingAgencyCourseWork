@@ -1,0 +1,213 @@
+﻿@page "/registration"
+
+<EditForm Model="@_userInputModel" OnValidSubmit="RegisterAsync" enctype="multipart/form-data" style="width:350px;">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-v10-content" style="margin-left: 60px;">
+        <div class="form-detail" id="myform">
+            <div class="form-left">
+
+                <h2>Персональная информация</h2>
+
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <input type="text" name="first_name" @bind="_userInputModel.User.ClientFullName" id="first_name" class="input-text" placeholder="Полное имя" required>
+                    </div>
+                    <div class="form-row form-row-2">
+                        <input type="password" name="last_name" @bind="_userInputModel.User.ClientPassword" id="last_name" class="input-text" placeholder="Пароль" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.User.ClientGender = e.Value.ToString())">
+                        <option value="н/б">Гендер</option>
+                        <option value="мужской">Мужской</option>
+                        <option value="женский">Женский</option>
+                        <option value="н/б">Н/Б</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.User.BodyType = e.Value.ToString())">
+                        <option value="стандартное">Телосложение</option>
+                        <option value="спортивное">Спортивное</option>
+                        <option value="стандартное">Стандартное</option>
+                        <option value="атлетическое">Атлетическое</option>
+                        <option value="полное">Полное</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.User.ClientKids = e.Value.ToString())">
+                        <option value="Нет">Дети</option>
+                        <option value="Да">Да</option>
+                        <option value="Нет">Нет</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="employees" @onchange="@((ChangeEventArgs e) => _userInputModel.User.EducationID = e.Value.ToString())">
+                        <option value="среднее">Образование</option>
+                        <option value="высшее">Высшее</option>
+                        <option value="среднее">Среднее</option>
+                        <option value="начальное">Начальное</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <label class="labels">Фотошка профиля</label>
+                    <InputFile OnChange="HandlePhotoSelection" accept="image/*" required />
+                </div>
+
+                <div class="form-row">
+                    <input type="text" name="company" class="company" @bind="_userInputModel.User.Email" id="company" placeholder="E-mail" required>
+                </div>
+
+                <div class="form-row">
+                    <label class="labels">Дата рождения</label>
+                    <input type="date" min="1950-06-01" max="2005-06-30" id="birthdaytime" name="Birth date"
+                           @bind="_userInputModel.User.BirthDate" @bind:format="yyyy-MM-dd">
+                </div>
+
+                <div class="form-row">
+                    <input type="text" name="company" @bind="_userInputModel.User.ClientInformation" class="company" id="company" placeholder="О себе" required>
+                </div>
+
+                <div class="form-row">
+                    <input type="text" name="company" @bind="_userInputModel.User.ClientCity" class="company" id="company" placeholder="Город" required>
+                </div>
+
+                <div class="form-row">
+                    <input type="text" name="company" @bind="_userInputModel.User.ClientHobbies" class="company" id="company" placeholder="Хобби (если есть)" required>
+                </div>
+
+            </div>
+
+            <div class="form-right">
+                <h2>Требования к партнеру</h2>
+
+                <div class="form-row">
+                    <input type="text" name="street" @bind="_userInputModel.RequirementOfUser.AgeFrom" class="street" id="street" placeholder="Минимальный возраст (введите число)" required>
+                </div>
+
+                <div class="form-row">
+                    <input type="text" name="additional" @bind="_userInputModel.RequirementOfUser.AgeTo" class="additional" id="additional" placeholder="Максимальный возраст (введите число)" required>
+                </div>
+
+                <div class="form-row form-row-4">
+                    <select name="employees" @onchange="@((ChangeEventArgs e) => _userInputModel.RequirementOfUser.Education = e.Value.ToString())">
+                        <option value="среднее">Образование</option>
+                        <option value="высшее">Высшее</option>
+                        <option value="среднее">Среднее</option>
+                        <option value="начальное">Начальное</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.RequirementOfUser.BodyType = e.Value.ToString())">
+                        <option value="стандартное">Телосложение</option>
+                        <option value="спортивное">Спортивное</option>
+                        <option value="стандартное">Стандартное</option>
+                        <option value="атлетическое">Атлетическое</option>
+                        <option value="полное">Полное</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.RequirementOfUser.PartnerGender = e.Value.ToString())">
+                        <option value="н/б">Гендер</option>
+                        <option value="мужской">Мужской</option>
+                        <option value="женский">Женский</option>
+                        <option value="н/б">Н/Б</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-row">
+                    <select name="position" @onchange="@((ChangeEventArgs e) => _userInputModel.RequirementOfUser.Kids = e.Value.ToString())">
+                        <option value="Нет">Дети</option>
+                        <option value="Да">Да</option>
+                        <option value="Нет">Нет</option>
+                    </select>
+                    <span class="select-btn">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </span>
+                </div>
+
+                <div class="form-checkbox">
+                    <label class="container">
+                        <p>Я ознакомлен с <a href="#" class="text">Правилами и условиями</a> эксплуатации сайта.</p>
+                        <input type="checkbox" name="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+
+                <div class="form-row-last" id="button-register">
+                    <input type="submit" name="register" value="Регистрация" style="background-color: cadetblue; border-radius: 21px; width: 225px;">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
+    public UserInputModel _userInputModel { get; set; }
+
+    public User NewUser { get; set; }
+
+    public Requirement NewRequirement { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _userInputModel = new UserInputModel();
+        _userInputModel.User = new User ();
+        _userInputModel.RequirementOfUser = new Requirement ();
+    }
+
+    private async Task HandlePhotoSelection(InputFileChangeEventArgs eventArgs)
+    {
+        await Task.Delay(1000);
+        var selectedFile = eventArgs.File;
+        var buffers = new byte[selectedFile.Size];
+
+        await selectedFile.OpenReadStream().ReadAsync(buffers);
+        _userInputModel.User.ProfilePhoto = buffers;     
+    }
+
+    private void RegisterAsync()
+    {
+        AgencyApiService.AddUser(_userInputModel);
+        NavigationManager.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,41 @@
+﻿<div class="col-3" style="margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">
+    <div class="card h-100" style="align-items: center; justify-content:space-between;">
+        <img class="card-img-top" src="@ConvertImageToUrl(CurrentUser.ProfilePicture)" alt="Profile photo" 
+             style="width: 60%;">
+
+        <div class="card-body" style="align-items: center; display: flex; flex-direction: column; flex:0 !important;">
+            <h5 class="card-title">@CurrentUser.Username</h5>
+            <p class="card-text">@CurrentUser.City</p>
+            <button type="button" class="btn btn-secondary btn-lg" style="background: #9F73AB; border: none;" @onclick="GoToProfile">
+                Перейти в профиль
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+    .card-img-top {
+        margin-top: 15px !important;
+    }
+
+</style>
+
+@code {
+    [Parameter]
+    public UserViewModel CurrentUser { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    private void GoToProfile()
+    {
+        NavigationManager.NavigateTo("/user/" + CurrentUser.Username + "/" + true);
+    }
+
+    private string ConvertImageToUrl(byte[] imageToConvert)
+    {
+        return "data:image;base64," + Convert.ToBase64String(imageToConvert);
+    }
+}

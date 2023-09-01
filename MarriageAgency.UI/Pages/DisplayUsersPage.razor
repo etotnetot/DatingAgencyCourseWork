@@ -1,0 +1,112 @@
+﻿@page "/profiles"
+
+<div class="flex-wrap">
+
+    <h2>Доступные партнеры</h2>
+
+    <div class="search-bar">
+        <input @bind="searchString" type="text" name="searchBar" placeholder="Найди свою любовь.." style="font-size: 17px;" />
+        <button type="button" class="btn btn-primary btn-lg" @onclick="@(()=> HandleSearch())" style=" background-color: #9E7676; border: none;">
+            Поиск
+        </button>
+    </div>
+
+    <div class="wrap">
+        <button type="button" class="btn btn-primary btn-lg" style="background: #4FA095; border: none; font-size: 17px;" @onclick="GetBestCandidates">
+            Найти лучшего!
+        </button>
+
+        <button type="button" style="background: #9F73AB; border: none; font-size: 17px;" class="btn btn-secondary btn-lg" @onclick="ShowAllUsers">
+            Показать всех
+        </button>
+    </div>
+
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4" style="margin-top: 33px;">
+
+    @if (UsersToDisplay == null)
+    {
+        <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
+    }
+    else
+    {
+        @foreach (var currentUser in UsersToDisplay)
+        {
+            if (currentUser.Username != CurrentUser)
+            {
+                <UserCardComponent CurrentUser="currentUser"></UserCardComponent>
+            }
+        }
+    }
+
+</div>
+
+<style>
+
+    .flex-wrap {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        align-items: center;
+        height: 210px;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+</style>
+
+@code {
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
+    private ICollection<UserViewModel> UsersToDisplay { get; set; }
+
+    private IEnumerable<UserViewModel> currentUsersList { get; set; }
+
+    private string CurrentUser { get; set; }
+
+    private string searchString { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var usersList = await AgencyApiService.GetUsers("GetUsers");
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);
+        currentUsersList = UsersToDisplay;
+
+        var currentUser = await _localStorageService.GetAsync<SecurityToken>(nameof(SecurityToken));
+        CurrentUser = currentUser.UserName;
+    }
+
+    private void ShowAllUsers()
+    {
+        @*var usersList = await AgencyApiService.GetUsers("GetUsers");
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);*@
+        UsersToDisplay = currentUsersList.ToList();
+
+        StateHasChanged();
+    }
+
+    private async void GetBestCandidates()
+    {
+        var usersList = await AgencyApiService.GetBestCandidates(CurrentUser);
+        UsersToDisplay = AgencyApiService.MapUsers(usersList);
+
+        StateHasChanged();
+    }
+
+    public void HandleSearch()
+    {
+        var searchQuery = (from user in currentUsersList
+                           where user.Username.StartsWith(searchString) ||
+                              user.City.StartsWith(searchString) || (int.TryParse(searchString, out int result) && result == user.Age)
+                           orderby user.Username
+                           select user);
+
+        UsersToDisplay = searchQuery.ToList();
+
+        StateHasChanged();
+    }
+}

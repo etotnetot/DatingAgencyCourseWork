@@ -1,0 +1,93 @@
+﻿<nav class="navbar navbar-expand-sm navbar-light" style="justify-content: space-between;">
+    <a class="navbar-brand" href="" style="font-size:23px;">Marriage aGENcy</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="navbar-nav mr-auto">
+            <AuthorizeView>
+                <Authorized>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" @onclick="GetProfilePageAsync" href="#">Profile</NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="profiles">Find</NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" @onclick="GetInvitationsPageAsync" href="#">Invitations</NavLink>
+                    </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="logout">Logout</NavLink>
+                    </li>
+
+                </Authorized>
+                <NotAuthorized>
+
+                    <RedirectToLoginComponent></RedirectToLoginComponent>
+
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+    </div>
+</nav>
+
+<style>
+
+    .navbar {
+        background-color: #6d9772 !important;
+    }
+
+    .navbar-nav {
+        align-items: baseline;
+    }
+
+    .navbar-nav li {
+        font-size: 20px!important;
+    }
+
+    .navbar-brand {
+        margin-left: 100px;
+    }
+
+</style>
+
+@code {
+    [Inject]
+    private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    private ILocalStorageService _localStorageService { get; set; }
+
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    public async void GetProfilePageAsync()
+    {
+        var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+        var userName = currentState?.User?.Identity?.Name ?? "Noname";
+        navigationManager.NavigateTo(("/user/" + userName + "/" + false), true);
+    }
+
+    public async void GetInvitationsPageAsync()
+    {
+        var currentState = await authenticationStateProvider.GetAuthenticationStateAsync();
+
+        var userName = currentState?.User?.Identity?.Name ?? "Noname";
+        navigationManager.NavigateTo(("/invitations/" + userName), true);
+    }
+}

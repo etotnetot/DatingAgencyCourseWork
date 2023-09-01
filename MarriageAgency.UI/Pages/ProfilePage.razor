@@ -1,0 +1,380 @@
+﻿@page "/user/{userName}/{ShowButton}"
+
+@if (UserToDisplay == null)
+{
+    <p style="text-align: center; justify-content: center;"><em>Loading...</em></p>
+}
+else
+{
+    <div class="container rounded bg-white mt-5 mb-5" style="width: 75%; box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);">
+        <div class="row">
+            <div class="col-md-3 border-right picture">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5" style="margin-left: 40px;">
+                    <img class="rounded-circle mt-5" width="300px" src="@ConvertImageToUrl(UserToDisplay.ProfilePhoto)" style="box-shadow: 11px 12px 26px -2px rgba(34, 60, 80, 0.16);" alt="Profile picture">
+
+                    <span class="font-weight-bold" style="font-size: 30px; margin-top:10px;">
+                        @UserToDisplay.ClientFullName
+                    </span>
+
+                    <span class="text-black-50" style="font-size: 20px;">
+                        @UserToDisplay.Email
+                    </span>
+
+                    @if (!invitationSent && ShowButton == "True")
+                    {
+                        <button class="btn btn-primary profile-button custom-btn" @onclick="@ModalShow">
+                            Отправить приглашение
+                        </button>
+                    }
+
+                    @if (showModal)
+                    {
+                        <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="border: 0 !important;">
+
+                                    <EditForm Model="@InvitationToSend" OnValidSubmit="@ModalSuccessfulShow">
+                                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                                        <ValidationSummary></ValidationSummary>
+
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Создание приглашения</h4>
+                                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <div class="form-row">
+                                                <input type="text" placeholder="Кому" value="@UserToDisplay.ClientFullName" required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <input type="text" @bind="InvitationToSend.InvitationPlace" placeholder="Место встречи" required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="birthdaytime" name="Дата" @bind="InvitationToSend.InvitationDate" @bind:format="yyyy-MM-dd">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" @onclick="@ModalCancel">Отмена</button>
+                                            <button class="btn btn-secondary" type="button" @onclick="@ModalSuccessfulShow">
+                                                Отправить приглашение
+                                            </button>
+                                        </div>
+
+                                    </EditForm>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (showSuccessfulModal)
+                    {
+                        <div class="modal fade show" id="myModalSuccess" style="display:block" aria-modal="true" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="border: 0 !important;">
+
+                                    <div class="modal-header" style="background: #709474;">
+                                        <h4 class="modal-title">Приглашение отправлено!</h4>
+                                        <button type="button" class="close" @onclick="@ModalSuccessfulCancel">&times;</button>
+                                    </div>
+
+                                    <div class="modal-body" style="background-color: #0000; height: 200px;">
+
+                                        <div class="form-row">
+
+                                            <img src="https://www.cnet.com/a/img/resize/18745075acf9e4ed11171d3398f09c29733866f3/hub/2022/10/15/4ee63290-986c-42c1-af30-1ab0e5ca6dd0/newemoji.png?auto=webp&width=1200"
+                                                 alt="Your picure is here" class="img-fluid"
+                                                 style="width: 180px; border-radius: 10px;">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                     }
+
+                </div>
+            </div>
+
+            <div class="col-md-5 border-right">
+
+                <div class="p-3 py-5 information">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Информация профиля</h4>
+                    </div>
+
+                    <div class="row mt-2">
+                        @if (UserToDisplay.ClientFullName.Split(' ').Length == 1)
+                        {
+                            <div class="col-md-6"><label class="labels">Имя</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName"></div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6"><label class="labels">Имя</label><input type="text" class="form-control" placeholder="first name" value="@UserToDisplay.ClientFullName.Split(' ')[0]"></div>
+                            <div class="col-md-6"><label class="labels">Фамилия</label><input type="text" class="form-control" value="@UserToDisplay.ClientFullName.Split(' ')[1]" placeholder="surname"></div>
+                        }
+                    </div>
+
+                    <div class="row mt-3 inputs">
+                        <div class="col-md-12">
+                            <label class="labels">Гендер</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.ClientGender" placeholder="your zodiac sign">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Образование</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.EducationID" placeholder="your zodiac sign">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="labels">Телосложение</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.BodyType" placeholder="your zodiac sign">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Дети</label>
+                            <input type="text" class="form-control" value="@UserToDisplay.ClientKids" placeholder="your zodiac sign">
+                        </div>
+                        <div class="col-md-12"><label class="labels">Город</label><input type="text" class="form-control" placeholder="enter your city" value="@UserToDisplay.ClientCity"></div>
+                        <div class="col-md-12"><label class="labels">Хобби</label><input type="text" class="form-control" placeholder="Hobbies" value="@UserToDisplay.ClientHobbies"></div>
+                        <div class="col-md-12"><label class="labels">Информация о себе</label><input type="text" class="form-control" placeholder="Information" value="@UserToDisplay.ClientInformation"></div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label class="labels">Дата рождения</label><input type="text" id="birthdaytime" name="birthdaytime" value="@UserToDisplay.BirthDate.ToString("dd-MM-yyyy")"></div>
+                        <div class="col-md-6"><label class="labels">Знак зодиака</label><input type="text" class="form-control" value="@CountZodiacSign(UserToDisplay.BirthDate)" placeholder="your zodiac sign"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+
+    .container {
+        margin: auto;
+        border-radius: 9px;
+        overflow: hidden;
+    }
+
+    .row {
+        background-color: #dee8b4 !important;
+    }
+
+    .border-right {
+        border-right: 0px !important;
+    }
+
+    .profile-img-main {
+        margin: 25px;
+        width: 85%;
+    }
+
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    .information {
+        width: 500px;
+        margin-left: 100px;
+    }
+
+    .picture {
+        margin-top: 25px;
+        margin-left: 50px;
+    }
+
+    .custom-btn {
+        background: #d8bcfc !important;
+        border: none !important;
+        color: black !important;
+        font-weight: 600 !important;
+        font-size: 18px !important;
+        border-radius: 101px;
+        margin-top: 22px;
+    }
+
+    .inputs {
+        height: 600px;
+    }
+
+    .row {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .modal {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        height: 270px;
+        justify-content: space-around;
+        align-items: center;
+        background: #D2DAFF;
+    }
+
+    .modal-footer {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        background: #D2DAFF;
+    }
+
+    .modal-header {
+        background: #E1FFEE;
+    }
+
+</style>
+
+@code {
+    [Inject]
+    public IAgencyApiService AgencyApiService { get; set; }
+
+    [Inject]
+    private AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    [Parameter]
+    public string ShowButton { get; set; }
+
+    public User UserToDisplay { get; set; }
+
+    public Invitation InvitationToSend { get; set; }
+
+    private bool showModal = false;
+
+    private bool showSuccessfulModal = false;
+
+    private bool invitationSent = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        InvitationToSend = new Invitation();
+        UserToDisplay = await AgencyApiService.GetUserByName(UserName);
+    }
+
+    private void ModalShow() => showModal = true;
+
+    private void ModalCancel() => showModal = false;
+
+    private void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
+
+    private async void SendInvitation()
+    {
+        InvitationToSend.Recipient = UserToDisplay.ClientID;
+
+        var name = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = await AgencyApiService.GetUserByName(name.User.Identity.Name);
+        InvitationToSend.Sender = currentUser.ClientID;
+
+        await AgencyApiService.SendInvitation(InvitationToSend);
+    }
+
+    private void ModalSuccessfulShow()
+    {
+        Task.Delay(1000);
+        SendInvitation();
+
+        invitationSent = true;
+        showModal = false;
+        showSuccessfulModal = true;
+    }
+
+    private void ModalSuccessfulCancel()
+    {
+        showModal = false;
+        showSuccessfulModal = false;
+    }
+
+    private string CountZodiacSign(DateTime dateToCount)
+    {
+        int day = dateToCount.Day;
+        int month = dateToCount.Month;
+
+        switch (month)
+        {
+            case 1:
+                if (day <= 19)
+                    return "Козерог";
+                else
+                    return "Водолей";
+            case 2:
+                if (day <= 18)
+                    return "Водолей";
+                else
+                    return "Рыбы";
+            case 3:
+                if (day <= 20)
+                    return "Водолей";
+                else
+                    return "Овен";
+            case 4:
+                if (day <= 19)
+                    return "Овен";
+                else
+                    return "Телец";
+            case 5:
+                if (day <= 20)
+                    return "Телец";
+                else
+                    return "Близнецы";
+            case 6:
+                if (day <= 20)
+                    return "Близнецы";
+                else
+                    return "Cancer";
+            case 7:
+                if (day <= 22)
+                    return "Рак";
+                else
+                    return "Лев";
+            case 8:
+                if (day <= 22)
+                    return "Лев";
+                else
+                    return "Дева";
+            case 9:
+                if (day <= 22)
+                    return "Дева";
+                else
+                    return "Весы";
+            case 10:
+                if (day <= 22)
+                    return "Весы";
+                else
+                    return "Скорпион";
+            case 11:
+                if (day <= 21)
+                    return "Скорпион";
+                else
+                    return "Стрелец";
+            case 12:
+                if (day <= 21)
+                    return "Стрелец";
+                else
+                    return "Козерог";
+        }
+
+        return "";
+    }
+
+    private string ConvertImageToUrl(byte[] imageToConvert)
+    {
+        return "data:image;base64," + Convert.ToBase64String(imageToConvert);
+    }
+}
